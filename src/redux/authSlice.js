@@ -1,13 +1,14 @@
-import { createSlice, asyncThunkCreator } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const loginUser = asyncThunkCreator(
+const loginUser = createAsyncThunk(
   "auth/loginUser",
   async (userData, thunkAPI) => {
     try {
       const res = await axios.post(
         `${import.meta.env.VITE_BASE_URL}/users/auth/login`,
         userData,
+        { withCredentials: true },
       );
       return res.data;
     } catch (err) {
@@ -16,13 +17,14 @@ const loginUser = asyncThunkCreator(
   },
 );
 
-const signupUser = asyncThunkCreator(
+const signupUser = createAsyncThunk(
   "auth/signupUser",
   async (userData, thunkAPI) => {
     try {
       const res = await axios.post(
         `${import.meta.env.VITE_BASE_URL}/users/auth/register`,
         userData,
+        { withCredentials: true },
       );
       return res.data;
     } catch (err) {
@@ -31,7 +33,7 @@ const signupUser = asyncThunkCreator(
   },
 );
 
-const verifyOtp = asyncThunkCreator(
+const verifyOtp = createAsyncThunk(
   "auth/verifyOtp",
   async (userData, thunkAPI) => {
     try {
@@ -46,7 +48,7 @@ const verifyOtp = asyncThunkCreator(
   },
 );
 
-const resendOtp = asyncThunkCreator(
+const resendOtp = createAsyncThunk(
   "auth/resendOtp",
   async (userData, thunkAPI) => {
     try {
@@ -61,7 +63,7 @@ const resendOtp = asyncThunkCreator(
   },
 );
 
-const logoutUser = asyncThunkCreator("auth/logoutUser", async (_, thunkAPI) => {
+const logoutUser = createAsyncThunk("auth/logoutUser", async (_, thunkAPI) => {
   try {
     const res = await axios.post(
       `${import.meta.env.VITE_BASE_URL}/users/auth/logout`,
@@ -78,6 +80,7 @@ const initialState = {
     ? JSON.parse(localStorage.getItem("user"))
     : null,
   otp: null,
+  token: null,
   message: null,
   loading: false,
   error: null,
@@ -106,6 +109,7 @@ const authSlice = createSlice({
         state.loading = false;
         state.isAuthenticated = true;
         state.user = action.payload.user;
+        state.token = action.payload.token;
         localStorage.setItem("user", JSON.stringify(action.payload.user));
       })
       .addCase(loginUser.rejected, (state, action) => {
@@ -120,6 +124,7 @@ const authSlice = createSlice({
         state.otp = action.payload.otp;
         state.isAuthenticated = true;
         state.user = action.payload.user;
+        state.token = action.payload.token;
         localStorage.setItem("user", JSON.stringify(action.payload.user));
         state.message = "Signup successful!";
       })
