@@ -65,10 +65,10 @@ const Authentication = () => {
           <p className="text-red-400 text-center">{error && error?.message}</p>
           <div className="mt-5 flex flex-col gap-4">
             <Input
-              label={"Username"}
-              placeholder={"john123"}
-              type={"text"}
-              name={"data"}
+              label={"Email"}
+              placeholder={"john@example.com"}
+              type={"email"}
+              name={"email"}
             />
             <div>
               <Input
