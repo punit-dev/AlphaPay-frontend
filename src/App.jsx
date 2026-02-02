@@ -1,44 +1,14 @@
-import React, { useEffect, useState } from "react";
-import { Route, Routes } from "react-router";
+import { Route, Routes, useLocation } from "react-router";
 import Authentication from "./screens/Authentication";
 import Home from "./screens/Home";
-import axios from "axios";
-import Button from "./components/Button";
+import Nav from "./components/Nav";
 
 const App = () => {
-  const [status, setStatus] = useState("loading");
-  const checkApiHealth = async () => {
-    setStatus("loading");
-
-    try {
-      const res = await axios.get(`https://alphapay.onrender.com/health`);
-
-      if (res.status == 200) {
-        setStatus("healthy");
-      } else {
-        setStatus("error");
-      }
-    } catch (error) {
-      setStatus("error");
-    }
-  };
-
-  useEffect(() => {
-    checkApiHealth();
-  }, []);
-
-  if (status == "loading") {
-    return <div>loading...</div>;
-  }
-
-  if (status == "error") {
-    return (
-      <Button onClick={() => window.location.reload()} label={"restart"} />
-    );
-  }
+  const location = useLocation();
 
   return (
-    <div className="bg-linear-140 from-purple-400 via-black to-blue-400 w-full h-screen px-7 overflow-hidden">
+    <div className="bg-linear-140 from-[#342952] via-[#0B0F1A] via-40% to-[#00AFFF] to-300% w-full h-screen overflow-hidden">
+      {location.pathname != "/authentication" && <Nav />}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/authentication" element={<Authentication />} />

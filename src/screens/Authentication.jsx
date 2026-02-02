@@ -48,7 +48,7 @@ const Authentication = () => {
 
   if (loading) return <h2 className="text-white text-center">loading...</h2>;
   return (
-    <div className="pt-18 flex flex-col">
+    <div className="pt-18 flex flex-col px-7">
       <div className="bg-red-400 h-50 w-50 mx-auto"></div>
       <motion.div
         initial={{ translateX: translate }}
