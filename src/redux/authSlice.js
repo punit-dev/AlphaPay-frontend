@@ -67,6 +67,9 @@ const logoutUser = createAsyncThunk("auth/logoutUser", async (_, thunkAPI) => {
   try {
     const res = await axios.post(
       `${import.meta.env.VITE_BASE_URL}/users/auth/logout`,
+      {
+        withCredentials: true,
+      },
     );
     return res.data;
   } catch (err) {
@@ -80,7 +83,7 @@ const initialState = {
     ? JSON.parse(localStorage.getItem("user"))
     : null,
   otp: null,
-  token: null,
+  token: localStorage.getItem("token") || null,
   message: null,
   loading: false,
   error: null,
@@ -111,6 +114,8 @@ const authSlice = createSlice({
         state.user = action.payload.user;
         state.token = action.payload.token;
         localStorage.setItem("user", JSON.stringify(action.payload.user));
+        localStorage.setItem("token", action.payload.token);
+        state.message = "Login successful!";
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;
@@ -127,6 +132,7 @@ const authSlice = createSlice({
         state.token = action.payload.token;
         localStorage.setItem("user", JSON.stringify(action.payload.user));
         state.message = "Signup successful!";
+        localStorage.setItem("token", action.payload.token);
       })
       .addCase(signupUser.rejected, (state, action) => {
         state.loading = false;
@@ -164,6 +170,9 @@ const authSlice = createSlice({
         state.isAuthenticated = false;
         state.user = null;
         localStorage.removeItem("user");
+        localStorage.removeItem("token");
+        state.token = null;
+        state.message = "Logout successful!";
       })
       .addCase(logoutUser.rejected, (state, action) => {
         state.loading = false;

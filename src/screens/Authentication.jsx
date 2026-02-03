@@ -31,8 +31,11 @@ const Authentication = () => {
     const formData = new FormData(form);
 
     const allValues = Object.fromEntries(formData.entries());
-    dispatch(loginUser(allValues));
-    navigate("/");
+    dispatch(loginUser(allValues)).then(({ payload }) => {
+      if (payload?.token) {
+        navigate("/");
+      }
+    });
   };
   const verifyFormHandler = (e) => {
     e.preventDefault();
@@ -42,8 +45,11 @@ const Authentication = () => {
 
     let allValues = Object.fromEntries(formData.entries());
     allValues = { ...allValues, email: user?.email };
-    dispatch(verifyOtp(allValues));
-    navigate("/");
+    dispatch(verifyOtp(allValues)).then(({ payload }) => {
+      if (payload?.message === "OTP Successfully verified") {
+        navigate("/");
+      }
+    });
   };
 
   if (loading) return <h2 className="text-white text-center">loading...</h2>;
