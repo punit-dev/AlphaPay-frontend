@@ -3,6 +3,35 @@ import QRCodeStyling from "qr-code-styling";
 import { motion } from "motion/react";
 import SearchInput from "../components/SearchInput";
 import { useSelector } from "react-redux";
+import SectionDiv from "../components/SectionDiv";
+import IconDiv from "../components/IconDiv";
+
+const moneyTransferIcons = [
+  {
+    label: "Scan to pay",
+    scr: "./icons/scan_qr.svg",
+  },
+  {
+    label: "UPI pay",
+    scr: "./icons/upi.svg",
+  },
+  {
+    label: "Wallet",
+    scr: "./icons/wallet.svg",
+  },
+  {
+    label: "Requests",
+    scr: "./icons/request_money.svg",
+  },
+  {
+    label: "Balance & history",
+    scr: "./icons/balance_hist.svg",
+  },
+  {
+    label: "Add a card",
+    scr: "./icons/add_card.svg",
+  },
+];
 
 const Home = () => {
   const qrRef = useRef(null);
@@ -23,10 +52,10 @@ const Home = () => {
         color: "#0B0F1A",
       },
       cornersSquareOptions: {
-        type: "extra-rounded",
+        type: "rounded",
       },
       cornersDotOptions: {
-        type: "extra-rounded",
+        type: "rounded",
       },
     });
     if (qrRef.current) {
@@ -83,10 +112,16 @@ const Home = () => {
         className="absolute h-screen w-full bg-white/10 backdrop-blur-xl rounded-t-3xl px-7 top-0 z-1">
         <div className="h-2 w-30 rounded-full bg-black mx-auto mt-2"></div>
         <SearchInput />
+        <SectionDiv
+          label={"Money Transfer"}
+          icons={moneyTransferIcons.map((item, idx) => (
+            <IconDiv key={idx} label={item.label} src={item.scr} />
+          ))}
+        />
       </motion.div>
       {isOpen ? (
         <button className="z-10 mx-auto bg-[#00AFFF] p-4 rounded-full">
-          <img src="./icons/scan_qr_dark.svg" alt="" className="h-15 w-15" />
+          <img src="./icons/scan_qr_dark.svg" alt="" className="h-12 w-12" />
         </button>
       ) : null}
     </div>

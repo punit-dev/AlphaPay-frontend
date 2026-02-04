@@ -4,6 +4,8 @@ import Home from "./screens/Home";
 import Nav from "./components/Nav";
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
+import ProtectedRoute from "./protectedRoute/protectedRoute";
+import ScannerScreen from "./screens/ScannerScreen";
 
 const App = () => {
   const location = useLocation();
@@ -54,8 +56,16 @@ const App = () => {
     <div className="bg-linear-140 from-[#342952] via-[#0B0F1A] via-40% to-[#00AFFF] to-300% w-full h-screen overflow-hidden">
       {location.pathname != "/authentication" && <Nav />}
       <Routes>
-        <Route path="/" element={<Home />} />
         <Route path="/authentication" element={<Authentication />} />
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              <Home />
+            </ProtectedRoute>
+          }
+        />
+        <Route path="/scanner" element={<ScannerScreen />} />
       </Routes>
     </div>
   );
