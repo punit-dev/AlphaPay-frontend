@@ -2,9 +2,12 @@ import React, { useEffect, useRef, useState } from "react";
 import QRCodeStyling from "qr-code-styling";
 import { motion } from "motion/react";
 import SearchInput from "../components/SearchInput";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchTransactions } from "../redux/transactionSlice";
 import SectionDiv from "../components/SectionDiv";
 import IconDiv from "../components/IconDiv";
+import SecondarySectionDiv from "../components/SecondarySectionDiv";
+import ProfileDiv from "../components/ProfileDiv";
 
 const moneyTransferIcons = [
   {
@@ -37,6 +40,18 @@ const Home = () => {
   const qrRef = useRef(null);
   const [isOpen, setIsOpen] = useState(true);
   const { user } = useSelector((state) => state.auth);
+  const { transactions, loading, error } = useSelector(
+    (state) => state.transactions,
+  );
+  const callRef = useRef(false);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (callRef.current) return;
+    callRef.current = true;
+    dispatch(fetchTransactions());
+  }, []);
 
   useEffect(() => {
     const qrCode = new QRCodeStyling({
@@ -123,6 +138,22 @@ const Home = () => {
             <IconDiv key={idx} label={item.label} src={item.scr} />
           ))}
         />
+        {transactions.length > 0 ? (
+          <SecondarySectionDiv
+            label={"Recent pays"}
+            background={true}
+            border={false}>
+            <div className="flex gap-7 items-center px-3">
+              {transactions.slice(0, 5).map((item, idx) => (
+                <ProfileDiv
+                  key={idx}
+                  name={item.fullname}
+                  src={item.profilePic}
+                />
+              ))}
+            </div>
+          </SecondarySectionDiv>
+        ) : null}
       </motion.div>
       {isOpen ? (
         <button className="z-10 mx-auto bg-[#00AFFF] p-4 rounded-full absolute bottom-30">
