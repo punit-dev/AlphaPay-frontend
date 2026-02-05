@@ -8,33 +8,7 @@ import SectionDiv from "../components/SectionDiv";
 import IconDiv from "../components/IconDiv";
 import SecondarySectionDiv from "../components/SecondarySectionDiv";
 import ProfileDiv from "../components/ProfileDiv";
-
-const moneyTransferIcons = [
-  {
-    label: "Scan to pay",
-    scr: "./icons/scan_qr.svg",
-  },
-  {
-    label: "UPI pay",
-    scr: "./icons/upi.svg",
-  },
-  {
-    label: "Wallet",
-    scr: "./icons/wallet.svg",
-  },
-  {
-    label: "Requests",
-    scr: "./icons/request_money.svg",
-  },
-  {
-    label: "Balance & history",
-    scr: "./icons/balance_hist.svg",
-  },
-  {
-    label: "Add a card",
-    scr: "./icons/add_card.svg",
-  },
-];
+import { useNavigate } from "react-router";
 
 const Home = () => {
   const qrRef = useRef(null);
@@ -78,6 +52,38 @@ const Home = () => {
       qrCode.append(qrRef.current);
     }
   });
+
+  const navigate = useNavigate();
+
+  const moneyTransferIcons = [
+    {
+      label: "Scan to pay",
+      scr: "./icons/scan_qr.svg",
+    },
+    {
+      label: "UPI pay",
+      scr: "./icons/upi.svg",
+    },
+    {
+      label: "Wallet",
+      scr: "./icons/wallet.svg",
+    },
+    {
+      label: "Requests",
+      scr: "./icons/request_money.svg",
+    },
+    {
+      label: "Balance & history",
+      scr: "./icons/balance_hist.svg",
+      onClick: (e) => {
+        navigate("balance-hist");
+      },
+    },
+    {
+      label: "Add a card",
+      scr: "./icons/add_card.svg",
+    },
+  ];
 
   return (
     <div className="w-full h-screen relative flex items-center flex-col">
@@ -135,7 +141,12 @@ const Home = () => {
         <SectionDiv
           label={"Money Transfer"}
           icons={moneyTransferIcons.map((item, idx) => (
-            <IconDiv key={idx} label={item.label} src={item.scr} />
+            <IconDiv
+              key={idx}
+              label={item.label}
+              src={item.scr}
+              onClick={item.onClick}
+            />
           ))}
         />
         {transactions.length > 0 ? (
