@@ -5,7 +5,6 @@ import Nav from "./components/Nav";
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import ProtectedRoute from "./protectedRoute/protectedRoute";
-import ScannerScreen from "./screens/ScannerScreen";
 
 const App = () => {
   const location = useLocation();
@@ -65,7 +64,6 @@ const App = () => {
             </ProtectedRoute>
           }
         />
-        <Route path="/scanner" element={<ScannerScreen />} />
       </Routes>
     </div>
   );

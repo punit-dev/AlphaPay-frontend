@@ -109,8 +109,13 @@ const Home = () => {
             setIsOpen(true);
           }
         }}
-        className="absolute h-screen w-full bg-white/10 backdrop-blur-xl rounded-t-3xl px-7 top-0 z-1">
-        <div className="h-2 w-30 rounded-full bg-black mx-auto mt-2"></div>
+        className="absolute h-screen w-full bg-white/10 backdrop-blur-xl rounded-t-3xl px-7 top-0 z-1"
+        style={{
+          overflowY: isOpen ? "auto" : "hidden",
+        }}>
+        {!isOpen ? (
+          <div className="h-2 w-30 rounded-full bg-black mx-auto mt-2"></div>
+        ) : null}
         <SearchInput />
         <SectionDiv
           label={"Money Transfer"}
@@ -120,7 +125,7 @@ const Home = () => {
         />
       </motion.div>
       {isOpen ? (
-        <button className="z-10 mx-auto bg-[#00AFFF] p-4 rounded-full">
+        <button className="z-10 mx-auto bg-[#00AFFF] p-4 rounded-full absolute bottom-30">
           <img src="./icons/scan_qr_dark.svg" alt="" className="h-12 w-12" />
         </button>
       ) : null}
