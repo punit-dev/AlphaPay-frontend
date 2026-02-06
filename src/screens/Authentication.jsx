@@ -65,7 +65,7 @@ const Authentication = () => {
         className="mt-10 flex items-center justify-center h-100 gap-15 ">
         {/**login form */}
         <AuthForm id={"ap-login"} formHandler={loginFormHandler}>
-          <h2 className="text-white text-center text-2xl font-medium">
+          <h2 className="text-white text-center text-3xl font-medium">
             Log in
           </h2>
           <p className="text-red-400 text-center">{error && error?.message}</p>
@@ -83,12 +83,12 @@ const Authentication = () => {
                 type={"password"}
                 name={"password"}
               />
-              <p className="text-[#00afff] text-lg font-medium">
-                forgot password?
+              <p className="text-[#00afff] text-md font-medium font-lexend">
+                Forgot password?
               </p>
             </div>
             <Button label={"Log in"} />
-            <p className="text-white">
+            <p className="text-white font-lexend text-[15px]">
               Don't have any account?{" "}
               <span
                 onClick={() => setTranslate("-60%")}
@@ -124,7 +124,7 @@ const Authentication = () => {
           <h2 className="text-white text-center text-2xl font-medium">
             Create an account
           </h2>
-          <p className="text-white mt-3">
+          <p className="text-white mt-3 font-lexend">
             Already have an account?{" "}
             <span onClick={() => setTranslate("180%")} className="text-[#0aff]">
               Login

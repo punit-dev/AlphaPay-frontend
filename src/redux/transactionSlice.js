@@ -3,20 +3,17 @@ import axios from "axios";
 
 const fetchTransactions = createAsyncThunk(
   "transactions/fetchTransactions",
-  async (_, thunkAPI) => {
+  async (limit, thunkAPI) => {
     try {
       const res = await axios.get(
-        `${import.meta.env.VITE_BASE_URL}/users/transactions`,
+        `${import.meta.env.VITE_BASE_URL}/users/transactions?limit=${limit}`,
         {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
           withCredentials: true,
         },
       );
-      console.log(res.data);
-
-      return res.data.allTransactions;
+      return res.data;
     } catch (err) {
-      console.log(err);
       return thunkAPI.rejectWithValue(
         err.response?.data?.message || err.message,
       );
@@ -28,6 +25,7 @@ const transactionSlice = createSlice({
   name: "transactions",
   initialState: {
     transactions: [],
+    balance: 0,
     loading: false,
     error: null,
   },
@@ -38,7 +36,8 @@ const transactionSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchTransactions.fulfilled, (state, action) => {
-        state.transactions = action.payload;
+        state.transactions = action.payload.allTransactions;
+        state.balance = action.payload.currentBalance;
         state.loading = false;
       })
       .addCase(fetchTransactions.rejected, (state, action) => {

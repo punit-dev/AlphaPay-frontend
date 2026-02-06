@@ -24,7 +24,7 @@ const Home = () => {
   useEffect(() => {
     if (callRef.current) return;
     callRef.current = true;
-    dispatch(fetchTransactions());
+    dispatch(fetchTransactions(3));
   }, []);
 
   useEffect(() => {
@@ -92,20 +92,22 @@ const Home = () => {
           initial={{ translateY: 180 }}
           animate={{ translateY: isOpen ? 180 : 0 }}
           transition={{ type: "tween", duration: 0.5 }}
-          className="text-3xl font-medium text-center text-white">
+          className="text-3xl font-semibold text-center text-white font-urbanist">
           Scan to pay
         </motion.h3>
         <motion.div
           initial={{ translateY: 100 }}
           animate={{ translateY: isOpen ? 100 : 0 }}
           transition={{ type: "tween", duration: 0.5, delay: 0.1 }}
-          className="flex gap-5 px-2 py-3">
+          className="flex gap-5 px-2 py-3 items-center">
           <div className="h-15 w-15 flex items-center overflow-hidden justify-center rounded-full">
             <img src={user?.profilePic} alt="" className="w-full h-full" />
           </div>
           <div className="font-medium text-white">
-            <p className="text-base text-[#B0B8C3]">{user?.fullname}</p>
-            <p className="text-lg">{user?.upiId}</p>
+            <p className="text-base text-[#B0B8C3] font-lexend">
+              {user?.fullname}
+            </p>
+            <p className="text-lg font-urbanist">{user?.upiId}</p>
           </div>
         </motion.div>
         <div
@@ -130,7 +132,7 @@ const Home = () => {
             setIsOpen(true);
           }
         }}
-        className="absolute h-screen w-full bg-white/10 backdrop-blur-xl rounded-t-3xl px-7 top-0 z-1"
+        className="absolute h-screen w-full bg-white/10 backdrop-blur-xl rounded-t-3xl px-5 top-0 z-1"
         style={{
           overflowY: isOpen ? "auto" : "hidden",
         }}>
@@ -149,22 +151,35 @@ const Home = () => {
             />
           ))}
         />
-        {transactions.length > 0 ? (
-          <SecondarySectionDiv
-            label={"Recent pays"}
-            background={true}
-            border={false}>
-            <div className="flex gap-7 items-center px-3">
-              {transactions.slice(0, 3).map((item, idx) => (
-                <ProfileDiv
-                  key={idx}
-                  name={item.payer.userRef?.fullname}
-                  src={item.payer.userRef.profilePic}
-                />
-              ))}
-            </div>
-          </SecondarySectionDiv>
-        ) : null}
+        <div className="mt-8">
+          {transactions.length > 0 ? (
+            <SecondarySectionDiv
+              label={"Recent pays"}
+              background={true}
+              border={false}
+              onClick={(e) => {
+                navigate("/balance-hist");
+              }}>
+              <div className="flex gap-7 items-center px-3">
+                {transactions.slice(0, 3).map((item, idx) => (
+                  <ProfileDiv
+                    key={idx}
+                    name={
+                      item.payer.userRef._id == user._id
+                        ? item.payee.name
+                        : item.payer.userRef.fullname
+                    }
+                    src={
+                      item.payer.userRef._id == user._id
+                        ? item.payee.userRef.profilePic
+                        : item.payer.userRef.profilePic
+                    }
+                  />
+                ))}
+              </div>
+            </SecondarySectionDiv>
+          ) : null}
+        </div>
       </motion.div>
       {isOpen ? (
         <button className="z-10 mx-auto bg-[#00AFFF] p-4 rounded-full absolute bottom-30">

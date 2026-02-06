@@ -9,7 +9,9 @@ const ProfileDiv = ({ onClick, src, name }) => {
       <div className="h-15 w-15 flex items-center overflow-hidden justify-center rounded-full">
         <img src={src} className="w-full h-full" />
       </div>
-      <p className="text-white text-center">{name?.split(" ")[0]}</p>
+      <p className="text-white text-center font-lexend font-normal">
+        {name?.split(" ")[0]}
+      </p>
     </button>
   );
 };

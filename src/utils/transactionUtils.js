@@ -44,7 +44,6 @@ export const groupTransactionsByDate = (transactions) => {
       }),
     }))
     .sort((a, b) => new Date(b.date) - new Date(a.date)); // Sort date groups by newest first
-  console.log(groupedArray);
 
   return groupedArray;
 };

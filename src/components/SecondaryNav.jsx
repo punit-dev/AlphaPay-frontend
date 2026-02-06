@@ -9,15 +9,16 @@ const SecondaryNav = ({ onClick, title }) => {
   };
 
   return (
-    <div className="flex items-center w-full px-4 py-3 bg-[#0B0F1A] border border-[#1F2633]">
+    <div className="flex justify-between items-center w-full px-4 py-3 bg-[#0B0F1A] border border-[#1F2633]">
       <button
         className="bg-[#161B26] p-1 rounded-full"
         onClick={onClick || backward}>
         <IoArrowBackOutline className="text-white h-7 w-7" />
       </button>
-      <div className="w-full">
-        <h2 className="text-2xl text-white font-medium text-center">{title}</h2>
-      </div>
+      <h2 className="text-2xl text-white font-semibold font-urbanist">
+        {title}
+      </h2>
+      <div className="w-10 h-10"></div>
     </div>
   );
 };

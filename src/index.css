@@ -1,1 +1,9 @@
+@import url("https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&family=Manrope:wght@200..800&family=Space+Grotesk:wght@300..700&family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap");
 @import "tailwindcss";
+
+@theme {
+  --font-lexend: "Lexend", sans-serif;
+  --font-space-grotesk: "Space Grotesk", sans-serif;
+  --font-urbanist: "Urbanist", sans-serif;
+  --font-manrope: "Manrope", sans-serif;
+}
