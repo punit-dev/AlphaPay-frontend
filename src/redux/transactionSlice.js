@@ -6,14 +6,17 @@ const fetchTransactions = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       const res = await axios.get(
-        `${import.meta.env.VITE_BASE_URL}/transactions`,
+        `${import.meta.env.VITE_BASE_URL}/users/transactions`,
         {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
           withCredentials: true,
         },
       );
+      console.log(res.data);
+
       return res.data.allTransactions;
     } catch (err) {
+      console.log(err);
       return thunkAPI.rejectWithValue(
         err.response?.data?.message || err.message,
       );

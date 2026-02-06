@@ -155,11 +155,11 @@ const Home = () => {
             background={true}
             border={false}>
             <div className="flex gap-7 items-center px-3">
-              {transactions.slice(0, 5).map((item, idx) => (
+              {transactions.slice(0, 3).map((item, idx) => (
                 <ProfileDiv
                   key={idx}
-                  name={item.fullname}
-                  src={item.profilePic}
+                  name={item.payer.userRef?.fullname}
+                  src={item.payer.userRef.profilePic}
                 />
               ))}
             </div>

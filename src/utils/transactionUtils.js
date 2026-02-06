@@ -40,10 +40,11 @@ export const groupTransactionsByDate = (transactions) => {
       transactions: transactions.sort((a, b) => {
         const timeA = new Date(a.createdAt || a.date || a.timestamp).getTime();
         const timeB = new Date(b.createdAt || b.date || b.timestamp).getTime();
-        return timeB - timeA; // Sort by newest first
+        return timeA - timeB; // Sort by newest first
       }),
     }))
     .sort((a, b) => new Date(b.date) - new Date(a.date)); // Sort date groups by newest first
+  console.log(groupedArray);
 
   return groupedArray;
 };
