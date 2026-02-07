@@ -7,9 +7,12 @@ const TransactionDiv = ({
   amount,
   createdAt,
   status,
+  onClick,
 }) => {
   return (
-    <div className="w-full bg-[#161B26] flex justify-between items-center rounded-xl p-3">
+    <div
+      onClick={onClick}
+      className="w-full bg-[#161B26] flex justify-between items-center rounded-xl p-3">
       <div className="flex text-white text-xl gap-3 items-center">
         <img src={profilePic} alt="" className="h-17 w-17 rounded-full" />
         <div className="flex flex-col font-lexend">

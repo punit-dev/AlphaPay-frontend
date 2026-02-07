@@ -6,12 +6,16 @@ import SecondarySectionDiv from "../components/SecondarySectionDiv";
 import { groupTransactionsByDate } from "../utils/transactionUtils";
 import { fetchTransactions } from "../redux/transactionSlice";
 import TransactionDiv from "../components/TransactionDiv";
+import { useNavigate } from "react-router";
 
 const BalanceHist = () => {
   const { user } = useSelector((state) => state.auth);
   const { transactions, loading, error, balance } = useSelector(
     (state) => state.transactions,
   );
+
+  const navigate = useNavigate();
+
   const callRef = useRef(false);
 
   const dispatch = useDispatch();
@@ -55,6 +59,9 @@ const BalanceHist = () => {
                       : transaction.payer.userRef.profilePic
                   }
                   status={transaction.status}
+                  onClick={() => {
+                    navigate(`/${transaction._id}`);
+                  }}
                 />
               ))}
             </SecondarySectionDiv>

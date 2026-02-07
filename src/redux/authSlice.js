@@ -6,7 +6,7 @@ const loginUser = createAsyncThunk(
   async (userData, thunkAPI) => {
     try {
       const res = await axios.post(
-        `${import.meta.env.VITE_BASE_URL}/users/auth/login`,
+        `${import.meta.env.VITE_BASE_URL}/auth/login`,
         userData,
         { withCredentials: true },
       );
@@ -22,7 +22,7 @@ const signupUser = createAsyncThunk(
   async (userData, thunkAPI) => {
     try {
       const res = await axios.post(
-        `${import.meta.env.VITE_BASE_URL}/users/auth/register`,
+        `${import.meta.env.VITE_BASE_URL}/auth/register`,
         userData,
         { withCredentials: true },
       );
@@ -38,7 +38,7 @@ const verifyOtp = createAsyncThunk(
   async (userData, thunkAPI) => {
     try {
       const res = await axios.post(
-        `${import.meta.env.VITE_BASE_URL}/users/auth/verify-otp`,
+        `${import.meta.env.VITE_BASE_URL}/auth/verify-otp`,
         userData,
       );
       return res.data;
@@ -53,7 +53,7 @@ const resendOtp = createAsyncThunk(
   async (userData, thunkAPI) => {
     try {
       const res = await axios.post(
-        `${import.meta.env.VITE_BASE_URL}/users/auth/resend-otp`,
+        `${import.meta.env.VITE_BASE_URL}/auth/resend-otp`,
         userData,
       );
       return res.data;
@@ -66,7 +66,7 @@ const resendOtp = createAsyncThunk(
 const logoutUser = createAsyncThunk("auth/logoutUser", async (_, thunkAPI) => {
   try {
     const res = await axios.post(
-      `${import.meta.env.VITE_BASE_URL}/users/auth/logout`,
+      `${import.meta.env.VITE_BASE_URL}/auth/logout`,
       {
         withCredentials: true,
       },

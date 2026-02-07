@@ -6,7 +6,7 @@ const fetchTransactions = createAsyncThunk(
   async (limit, thunkAPI) => {
     try {
       const res = await axios.get(
-        `${import.meta.env.VITE_BASE_URL}/users/transactions?limit=${limit}`,
+        `${import.meta.env.VITE_BASE_URL}/transactions?limit=${limit}`,
         {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
           withCredentials: true,
@@ -21,10 +21,34 @@ const fetchTransactions = createAsyncThunk(
   },
 );
 
+const fetchTxn = createAsyncThunk(
+  "transactions/fetchTxn",
+  async (txnId, thunkAPI) => {
+    try {
+      const res = await axios.get(
+        `${import.meta.env.VITE_BASE_URL}/transactions/get-transaction-by-id?query=${txnId}`,
+        {
+          withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        },
+      );
+      return res.data.transaction;
+    } catch (err) {
+      if (axios.isCancel(err)) return;
+      return thunkAPI.rejectWithValue(
+        err.response?.data?.message || "Something went wrong",
+      );
+    }
+  },
+);
+
 const transactionSlice = createSlice({
   name: "transactions",
   initialState: {
     transactions: [],
+    txn: null,
     balance: 0,
     loading: false,
     error: null,
@@ -43,9 +67,21 @@ const transactionSlice = createSlice({
       .addCase(fetchTransactions.rejected, (state, action) => {
         state.error = action.payload;
         state.loading = false;
+      })
+      .addCase(fetchTxn.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchTxn.fulfilled, (state, action) => {
+        state.txn = action.payload;
+        state.loading = false;
+      })
+      .addCase(fetchTxn.rejected, (state, action) => {
+        state.error = action.payload;
+        state.loading = false;
       });
   },
 });
 
-export { fetchTransactions };
+export { fetchTransactions, fetchTxn };
 export default transactionSlice.reducer;
