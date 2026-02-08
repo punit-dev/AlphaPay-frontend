@@ -7,6 +7,7 @@ import { groupTransactionsByDate } from "../utils/transactionUtils";
 import { fetchTransactions } from "../redux/transactionSlice";
 import TransactionDiv from "../components/TransactionDiv";
 import { useNavigate } from "react-router";
+import Loading from "./Loading";
 
 const BalanceHist = () => {
   const { user } = useSelector((state) => state.auth);
@@ -25,6 +26,8 @@ const BalanceHist = () => {
     callRef.current = true;
     dispatch(fetchTransactions(50));
   }, []);
+
+  if (loading) return <Loading />;
 
   const groupedTransactions = groupTransactionsByDate(transactions);
   return (
@@ -60,7 +63,7 @@ const BalanceHist = () => {
                   }
                   status={transaction.status}
                   onClick={() => {
-                    navigate(`/${transaction._id}`);
+                    navigate(`/balance-hist/${transaction._id}`);
                   }}
                 />
               ))}

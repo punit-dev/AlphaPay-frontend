@@ -4,8 +4,14 @@ import AuthForm from "../components/AuthForm";
 import Button from "../components/Button";
 import { motion } from "motion/react";
 import { useDispatch, useSelector } from "react-redux";
-import { signupUser, loginUser, verifyOtp } from "../redux/authSlice";
+import {
+  signupUser,
+  loginUser,
+  verifyOtp,
+  resendOtp,
+} from "../redux/authSlice";
 import { useNavigate } from "react-router";
+import Loading from "./Loading";
 
 const Authentication = () => {
   const [translate, setTranslate] = useState("60%");
@@ -33,7 +39,7 @@ const Authentication = () => {
     const allValues = Object.fromEntries(formData.entries());
     dispatch(loginUser(allValues)).then(({ payload }) => {
       if (payload?.token) {
-        navigate("/");
+        navigate("/home");
       }
     });
   };
@@ -47,15 +53,20 @@ const Authentication = () => {
     allValues = { ...allValues, email: user?.email };
     dispatch(verifyOtp(allValues)).then(({ payload }) => {
       if (payload?.message === "OTP Successfully verified") {
-        navigate("/");
+        navigate("/home");
       }
     });
   };
 
-  if (loading) return <h2 className="text-white text-center">loading...</h2>;
+  if (loading) return <Loading />;
   return (
-    <div className="pt-18 flex flex-col px-7">
-      <div className="bg-red-400 h-50 w-50 mx-auto"></div>
+    <div className="pt-10 flex flex-col px-7">
+      <div className="h-50 w-50 mx-auto flex flex-col items-center justify-center gap-3">
+        <img src="/icons/icon.svg" alt="" className="h-35 w-35" />
+        <h1 className="text-4xl font-bold bg-clip-text bg-linear-140 from-[#00Afff] from-6% to-92% to-[#A27Eff] text-transparent font-space-grotesk">
+          AlphaPay
+        </h1>
+      </div>
       <motion.div
         initial={{ translateX: translate }}
         animate={{ translateX: translate }}
@@ -179,6 +190,13 @@ const Authentication = () => {
               please enter 6 digit code sent to {user?.email}
             </p>
             <Input type={"text"} name={"otp"} />
+            <p
+              className="text-right text-[#00AFFF] -mt-3 mr-2 text-lg font-lexend font-medium"
+              onClick={(e) => {
+                dispatch(resendOtp(user?.email));
+              }}>
+              Resend
+            </p>
             <Button label={"Verify"} />
           </div>
         </AuthForm>

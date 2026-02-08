@@ -9,6 +9,7 @@ import IconDiv from "../components/IconDiv";
 import SecondarySectionDiv from "../components/SecondarySectionDiv";
 import ProfileDiv from "../components/ProfileDiv";
 import { useNavigate } from "react-router";
+import ProfileView from "../components/ProfileView";
 
 const Home = () => {
   const qrRef = useRef(null);
@@ -57,11 +58,11 @@ const Home = () => {
 
   const moneyTransferIcons = [
     {
-      label: "Scan to pay",
-      scr: "./icons/scan_qr.svg",
+      label: "Phone",
+      scr: "./icons/mobile_pay.svg",
     },
     {
-      label: "UPI pay",
+      label: "UPI",
       scr: "./icons/upi.svg",
     },
     {
@@ -76,7 +77,7 @@ const Home = () => {
       label: "Balance & history",
       scr: "./icons/balance_hist.svg",
       onClick: (e) => {
-        navigate("balance-hist");
+        navigate("/balance-hist");
       },
     },
     {
@@ -90,26 +91,19 @@ const Home = () => {
       <div className="py-10 flex flex-col gap-7 items-center">
         <motion.h3
           initial={{ translateY: 180 }}
-          animate={{ translateY: isOpen ? 180 : 0 }}
+          animate={{
+            translateY: isOpen ? 180 : 0,
+          }}
           transition={{ type: "tween", duration: 0.5 }}
           className="text-3xl font-semibold text-center text-white font-urbanist">
           Scan to pay
         </motion.h3>
-        <motion.div
+        <ProfileView
+          user={user}
           initial={{ translateY: 100 }}
           animate={{ translateY: isOpen ? 100 : 0 }}
           transition={{ type: "tween", duration: 0.5, delay: 0.1 }}
-          className="flex gap-5 px-2 py-3 items-center">
-          <div className="h-15 w-15 flex items-center overflow-hidden justify-center rounded-full">
-            <img src={user?.profilePic} alt="" className="w-full h-full" />
-          </div>
-          <div className="font-medium text-white">
-            <p className="text-base text-[#B0B8C3] font-lexend">
-              {user?.fullname}
-            </p>
-            <p className="text-lg font-urbanist">{user?.upiId}</p>
-          </div>
-        </motion.div>
+        />
         <div
           ref={qrRef}
           className="w-70 h-70 bg-[#0B0F1A] flex items-center justify-center rounded-3xl z-1"></div>
@@ -139,7 +133,6 @@ const Home = () => {
         {!isOpen ? (
           <div className="h-2 w-30 rounded-full bg-black mx-auto mt-2"></div>
         ) : null}
-        <SearchInput />
         <SectionDiv
           label={"Money Transfer"}
           icons={moneyTransferIcons.map((item, idx) => (
@@ -174,6 +167,7 @@ const Home = () => {
                         ? item.payee.userRef.profilePic
                         : item.payer.userRef.profilePic
                     }
+                    onClick={() => navigate(`/balance-hist/${item._id}`)}
                   />
                 ))}
               </div>
@@ -181,11 +175,15 @@ const Home = () => {
           ) : null}
         </div>
       </motion.div>
-      {isOpen ? (
-        <button className="z-10 mx-auto bg-[#00AFFF] p-4 rounded-full absolute bottom-30">
-          <img src="./icons/scan_qr_dark.svg" alt="" className="h-12 w-12" />
-        </button>
-      ) : null}
+      <motion.button
+        initial={{ display: "block", opacity: 1 }}
+        animate={{
+          opacity: isOpen ? 1 : 0,
+          display: isOpen ? "block" : "none",
+        }}
+        className="z-10 mx-auto bg-[#00AFFF] p-4 rounded-full absolute bottom-30">
+        <img src="./icons/scan_qr_dark.svg" alt="" className="h-12 w-12" />
+      </motion.button>
     </div>
   );
 };

@@ -5,6 +5,9 @@ import { useDispatch, useSelector } from "react-redux";
 import Detail from "../components/Detail";
 import { fetchTxn } from "../redux/transactionSlice";
 import SecondarySectionDiv from "../components/SecondarySectionDiv";
+import SuccessSVG from "/images/success.svg";
+import FailedSVG from "/images/failed.svg";
+import Loading from "./Loading";
 
 const TransactionDetail = () => {
   const { txnId } = useParams();
@@ -18,16 +21,11 @@ const TransactionDetail = () => {
     }
   }, [txnId]);
 
-  if (loading)
-    return (
-      <div className="h-screen w-full bg-red-400 flex items-center justify-center">
-        Loading...
-      </div>
-    );
+  if (loading) return <Loading />;
   if (error) return <div>Error: {error}</div>;
 
   return (
-    <div className="h-screen w-full bg-[#0B0F1A] px-5 ">
+    <div className="h-screen w-full bg-[#0B0F1A]">
       {txn && (
         <SecondaryNav
           title={
@@ -45,13 +43,7 @@ const TransactionDetail = () => {
           ₹{txn?.amount}
         </h2>
         <div className="flex items-center justify-center">
-          <img
-            src={
-              txn?.status == "SUCCESS"
-                ? "./images/success.svg"
-                : "./images/failed.svg"
-            }
-          />
+          <img src={txn?.status == "SUCCESS" ? SuccessSVG : FailedSVG} />
           <p
             className="font-urbanist text-xl font-semibold"
             style={{
@@ -62,7 +54,7 @@ const TransactionDetail = () => {
         </div>
       </div>
 
-      <div className="mt-7">
+      <div className="mt-7 px-5">
         <div className="bg-[#161B26] w-full rounded-xl px-4 py-3">
           <Detail
             key={0}
@@ -81,7 +73,7 @@ const TransactionDetail = () => {
         </div>
       </div>
 
-      <div className="mt-10">
+      <div className="mt-10 px-5">
         <SecondarySectionDiv
           label={"Transaction Details"}
           background={false}

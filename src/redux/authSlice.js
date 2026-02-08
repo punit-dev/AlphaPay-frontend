@@ -50,11 +50,11 @@ const verifyOtp = createAsyncThunk(
 
 const resendOtp = createAsyncThunk(
   "auth/resendOtp",
-  async (userData, thunkAPI) => {
+  async (email, thunkAPI) => {
     try {
       const res = await axios.post(
         `${import.meta.env.VITE_BASE_URL}/auth/resend-otp`,
-        userData,
+        { email },
       );
       return res.data;
     } catch (err) {
