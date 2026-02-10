@@ -44,12 +44,34 @@ const fetchTxn = createAsyncThunk(
   },
 );
 
+const userToUserTransfer = createAsyncThunk(
+  "transactions/userToUserTransfer",
+  async (transferData, thunkAPI) => {
+    try {
+      const res = await axios.post(
+        `${import.meta.env.VITE_BASE_URL}/transactions/user-to-user`,
+        transferData,
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+          withCredentials: true,
+        },
+      );
+      return res.data.transaction;
+    } catch (err) {
+      return thunkAPI.rejectWithValue(
+        err.response?.data?.message || err.message,
+      );
+    }
+  },
+);
+
 const transactionSlice = createSlice({
   name: "transactions",
   initialState: {
     transactions: [],
     txn: null,
     balance: 0,
+    status: "Processing",
     loading: false,
     error: null,
   },
@@ -79,9 +101,24 @@ const transactionSlice = createSlice({
       .addCase(fetchTxn.rejected, (state, action) => {
         state.error = action.payload;
         state.loading = false;
+      })
+      .addCase(userToUserTransfer.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+        state.status = "Processing";
+      })
+      .addCase(userToUserTransfer.fulfilled, (state, action) => {
+        state.loading = false;
+        state.status = "Successful";
+        state.txn = action.payload;
+      })
+      .addCase(userToUserTransfer.rejected, (state, action) => {
+        state.error = action.payload;
+        state.loading = false;
+        state.status = "Failed";
       });
   },
 });
 
-export { fetchTransactions, fetchTxn };
+export { fetchTransactions, fetchTxn, userToUserTransfer };
 export default transactionSlice.reducer;

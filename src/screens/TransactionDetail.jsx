@@ -59,14 +59,14 @@ const TransactionDetail = () => {
           <Detail
             key={0}
             createdAt={txn?.createdAt}
-            name={txn?.payee.name}
+            name={txn?.payer.userRef.fullname}
             title={"Sander"}
             upiId={txn?.payee.upiId}
           />
           <Detail
             key={1}
             createdAt={txn?.createdAt}
-            name={txn?.payer.userRef.fullname}
+            name={txn?.payee.userRef.fullname}
             title={"Receiver"}
             upiId={txn?.payer.upiId}
           />

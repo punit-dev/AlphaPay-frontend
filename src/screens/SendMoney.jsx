@@ -1,17 +1,17 @@
 import React, { useState } from "react";
 import SecondaryNav from "../components/SecondaryNav";
 import ProfileView from "../components/ProfileView";
-import { useSelector } from "react-redux";
 import PaymentInput from "../components/PaymentInput";
 import Button from "../components/Button";
-import { motion } from "motion/react";
+import { m, motion } from "motion/react";
 import PaymentOption from "../components/PaymentOption";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 
 const options = ["Wallet", "Card"];
 
 const SendMoney = () => {
-  const { user } = useSelector((state) => state.auth);
+  const location = useLocation();
+  const { user } = location.state;
 
   const navigate = useNavigate();
 
@@ -73,21 +73,19 @@ const SendMoney = () => {
                   if (option === "Wallet") {
                     navigate("/confirm-pay", {
                       state: {
-                        payee: user.upiId,
-                        name: user.fullname,
+                        user,
                         amount,
+                        method: "Wallet",
                         note,
-                        method: "wallet",
                       },
                     });
                   } else if (option === "Card") {
                     navigate("/confirm-pay", {
                       state: {
-                        payee: user.upiId,
-                        name: user.fullname,
+                        user,
                         amount,
+                        method: "Card",
                         note,
-                        method: "card",
                       },
                     });
                   }

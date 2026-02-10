@@ -10,6 +10,8 @@ import TransactionDetail from "./screens/TransactionDetail";
 import SendMoney from "./screens/SendMoney";
 import ConfirmPay from "./screens/ConfirmPay";
 import SplashScreen from "./screens/SplashScreen";
+import PhonePay from "./screens/PhonePay";
+import UpiPay from "./screens/UpiPay";
 
 const App = () => {
   const location = useLocation();
@@ -20,47 +22,32 @@ const App = () => {
       <Routes>
         <Route path="/" element={<SplashScreen />} />
         <Route path="/authentication" element={<Authentication />} />
-        <Route
-          path="/home"
-          element={
-            <ProtectedRoute>
-              <Home />
-            </ProtectedRoute>
-          }
-        />
+        <Route path="/home" element={<ProtectedRoute children={<Home />} />} />
         <Route
           path="/balance-hist"
-          element={
-            <ProtectedRoute>
-              <BalanceHist />
-            </ProtectedRoute>
-          }
+          element={<ProtectedRoute children={<BalanceHist />} />}
         />
         <Route
           path="/balance-hist/:txnId"
-          element={
-            <ProtectedRoute>
-              <TransactionDetail />
-            </ProtectedRoute>
-          }
+          element={<ProtectedRoute children={<TransactionDetail />} />}
+        />
+        <Route
+          path="/phone-pay"
+          element={<ProtectedRoute children={<PhonePay />} />}
+        />
+        <Route
+          path="/upi-pay"
+          element={<ProtectedRoute children={<UpiPay />} />}
         />
         <Route
           path="/send-money"
-          element={
-            <ProtectedRoute>
-              <SendMoney />
-            </ProtectedRoute>
-          }
+          element={<ProtectedRoute children={<SendMoney />} />}
         />
         <Route
           path="/confirm-pay"
-          element={
-            <ProtectedRoute>
-              <ConfirmPay />
-            </ProtectedRoute>
-          }
+          element={<ProtectedRoute children={<ConfirmPay />} />}
         />
-        {/* <Route path="*" element={<Navigate to="/splash" replace />} /> */}
+        <Route path="*" element={<Navigate to="/splash" replace />} />
       </Routes>
     </div>
   );

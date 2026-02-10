@@ -46,7 +46,7 @@ const BalanceHist = () => {
                 <TransactionDiv
                   key={transaction._id}
                   amount={
-                    transaction.payer.userRef._id === user._id
+                    transaction.payee.userRef._id === user._id
                       ? "+" + transaction.amount
                       : "-" + transaction.amount
                   }

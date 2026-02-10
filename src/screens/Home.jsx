@@ -60,10 +60,16 @@ const Home = () => {
     {
       label: "Phone",
       scr: "./icons/mobile_pay.svg",
+      onClick: (e) => {
+        navigate("/phone-pay");
+      },
     },
     {
       label: "UPI",
       scr: "./icons/upi.svg",
+      onClick: (e) => {
+        navigate("/upi-pay");
+      },
     },
     {
       label: "Wallet",
