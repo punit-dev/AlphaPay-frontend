@@ -36,7 +36,7 @@ const SendMoney = () => {
         <Button
           label={"Pay"}
           onClick={() => {
-            if (amount.length == 0) {
+            if (amount.length === 0 || amount == 0) {
               alert("Please enter an amount");
               return;
             }

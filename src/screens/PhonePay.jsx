@@ -1,49 +1,27 @@
 import React, { useEffect, useState } from "react";
 import SecondaryNav from "../components/SecondaryNav";
 import { motion } from "motion/react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import ProfileForSend from "../components/ProfileForSend";
 import axios from "axios";
 import { useNavigate } from "react-router";
+import { callSearchApi } from "../redux/usersSlice";
 
 const PhonePay = () => {
   const [searchVal, setSearchVal] = useState("");
   const [selected, setSelected] = useState(false);
-  const [searchResults, setSearchResults] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const { loading, users, error } = useSelector((state) => state.users);
+
+  const dispatch = useDispatch();
 
   const { user } = useSelector((state) => state.auth);
   const navigate = useNavigate();
 
-  const callSearchApi = async () => {
-    try {
-      setError(null);
-      setLoading(true);
-      const res = await axios.get(
-        `${import.meta.env.VITE_BASE_URL}/search?query=${searchVal}`,
-        {
-          withCredentials: true,
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        },
-      );
-      setSearchResults(res.data.results);
-    } catch (err) {
-      setError(err.response?.data?.message || "Not Found");
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
-    if (searchVal.length === 0) {
-      setSearchResults([]);
-      return;
-    }
+    if (searchVal.length === 0) return;
+
     const delayDebounceFn = setTimeout(() => {
-      callSearchApi();
+      dispatch(callSearchApi(searchVal));
     }, 500);
 
     return () => clearTimeout(delayDebounceFn);
@@ -79,7 +57,7 @@ const PhonePay = () => {
               {error}
             </p>
           ) : (
-            searchResults.map((profile) =>
+            users.map((profile) =>
               profile._id === user._id ? null : (
                 <ProfileForSend
                   key={profile._id}

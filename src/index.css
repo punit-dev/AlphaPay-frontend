@@ -7,3 +7,10 @@
   --font-urbanist: "Urbanist", sans-serif;
   --font-manrope: "Manrope", sans-serif;
 }
+
+#scanner video {
+  height: 100vh;
+  background: white;
+  width: 100%;
+  object-fit: cover;
+}

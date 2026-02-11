@@ -58,10 +58,10 @@ const Home = () => {
 
   const moneyTransferIcons = [
     {
-      label: "Phone",
-      scr: "./icons/mobile_pay.svg",
+      label: "Scan",
+      scr: "./icons/scan_qr.svg",
       onClick: (e) => {
-        navigate("/phone-pay");
+        navigate("/scan-qr");
       },
     },
     {
@@ -72,8 +72,11 @@ const Home = () => {
       },
     },
     {
-      label: "Wallet",
-      scr: "./icons/wallet.svg",
+      label: "Phone",
+      scr: "./icons/mobile_pay.svg",
+      onClick: (e) => {
+        navigate("/phone-pay");
+      },
     },
     {
       label: "Requests",
