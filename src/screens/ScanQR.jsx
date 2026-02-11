@@ -54,11 +54,7 @@ const ScanQR = () => {
 
     return () => {
       if (qrRef.current?.isScanning) {
-        qrRef.current
-          .stop()
-          .then(() =>
-            navigate("/send-money", { state: { user: searchResults[0] } }),
-          );
+        qrRef.current.stop();
       }
     };
   }, []);
@@ -68,7 +64,9 @@ const ScanQR = () => {
       setSearchResults([]);
       return;
     }
-    callSearchApi();
+    callSearchApi().then(() =>
+      navigate("/send-money", { state: { user: searchResults[0] } }),
+    );
   }, [upiId]);
 
   if (loading) {

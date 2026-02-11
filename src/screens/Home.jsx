@@ -190,6 +190,7 @@ const Home = () => {
           opacity: isOpen ? 1 : 0,
           display: isOpen ? "block" : "none",
         }}
+        onClick={() => navigate("/scan-qr")}
         className="z-10 mx-auto bg-[#00AFFF] p-4 rounded-full absolute bottom-30">
         <img src="./icons/scan_qr_dark.svg" alt="" className="h-12 w-12" />
       </motion.button>
