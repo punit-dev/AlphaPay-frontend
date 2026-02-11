@@ -2,7 +2,7 @@ import { Navigate, Route, Routes, useLocation } from "react-router";
 import Authentication from "./screens/Authentication";
 import Home from "./screens/Home";
 import Nav from "./components/Nav";
-import ProtectedRoute from "./protectedRoute/protectedRoute";
+import ProtectedRoute from "./protectedRoute/ProtectedRoute";
 import BalanceHist from "./screens/BalanceHist";
 import TransactionDetail from "./screens/TransactionDetail";
 import SendMoney from "./screens/SendMoney";
