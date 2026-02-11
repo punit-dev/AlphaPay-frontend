@@ -20,7 +20,7 @@ const ConfirmPay = () => {
     dispatch(
       userToUserTransfer({
         payee: user.upiId,
-        amount,
+        amount: parseInt(amount),
         message: note,
         method: method.toLowerCase(),
         pin: upiPin,

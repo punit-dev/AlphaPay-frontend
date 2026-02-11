@@ -3,8 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Html5Qrcode } from "html5-qrcode";
 import SecondaryNav from "../components/SecondaryNav";
 import { motion } from "motion/react";
-import { useDispatch, useSelector } from "react-redux";
-import { callSearchApi } from "../redux/usersSlice";
+import { useSelector } from "react-redux";
 import Loading from "./Loading";
 import ErrorScreen from "./ErrorScreen";
 import { useNavigate } from "react-router";
@@ -13,9 +12,33 @@ const ScanQR = () => {
   const qrRef = useRef(null);
   const isMountedRef = useRef(false);
   const [upiId, setUpiId] = useState("");
-  const { loading, users, error } = useSelector((state) => state.users);
-  const dispatch = useDispatch();
+  const [searchResults, setSearchResults] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const { user } = useSelector((state) => state.auth);
   const navigate = useNavigate();
+
+  const callSearchApi = async () => {
+    try {
+      setError(null);
+      setLoading(true);
+      const res = await axios.get(
+        `${import.meta.env.VITE_BASE_URL}/search?query=${upiId}`,
+        {
+          withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        },
+      );
+      setSearchResults(res.data.results);
+    } catch (err) {
+      setError(err.response?.data?.message || "Not Found");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     if (isMountedRef.current) return;
@@ -33,13 +56,20 @@ const ScanQR = () => {
       if (qrRef.current?.isScanning) {
         qrRef.current
           .stop()
-          .then(() => {
-            if (upiId) dispatch(callSearchApi(upiId));
-          })
-          .then(() => navigate("/send-money", { state: { user: users[0] } }));
+          .then(() =>
+            navigate("/send-money", { state: { user: searchResults[0] } }),
+          );
       }
     };
   }, []);
+
+  useEffect(() => {
+    if (upiId.length === 0) {
+      setSearchResults([]);
+      return;
+    }
+    callSearchApi();
+  }, [upiId]);
 
   if (loading) {
     return <Loading />;

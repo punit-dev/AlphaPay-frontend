@@ -99,15 +99,6 @@ const AfterConfirmScreen = ({ title, loading = false, user, amount }) => {
           {title}
         </p>
         <div className="relative">
-          {isAnimates && (
-            <motion.img
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.5, ease: "easeOut", delay: 0.4 }}
-              src="./images/success.gif"
-              className="absolute left-1/2 top-1/2 -translate-1/2"
-            />
-          )}
           <motion.img
             initial={{ opacity: 0, scale: 0.8, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: isAnimates ? 0 : -40 }}
