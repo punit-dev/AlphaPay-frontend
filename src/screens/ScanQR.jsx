@@ -5,26 +5,24 @@ import SecondaryNav from "../components/SecondaryNav";
 import { motion } from "motion/react";
 import { useSelector } from "react-redux";
 import Loading from "./Loading";
-import ErrorScreen from "./ErrorScreen";
+import Button from "../components/Button";
 import { useNavigate } from "react-router";
 
 const ScanQR = () => {
   const qrRef = useRef(null);
   const isMountedRef = useRef(false);
-  const [upiId, setUpiId] = useState("");
-  const [searchResults, setSearchResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const { user } = useSelector((state) => state.auth);
   const navigate = useNavigate();
 
-  const callSearchApi = async () => {
+  const callSearchApi = async (decodedText) => {
     try {
       setError(null);
       setLoading(true);
       const res = await axios.get(
-        `${import.meta.env.VITE_BASE_URL}/search?query=${upiId}`,
+        `${import.meta.env.VITE_BASE_URL}/search?query=${decodedText}`,
         {
           withCredentials: true,
           headers: {
@@ -32,7 +30,13 @@ const ScanQR = () => {
           },
         },
       );
-      setSearchResults(res.data.results);
+      const foundUser = res.data.results[0];
+
+      if (!foundUser) {
+        setError("User Not Found");
+      }
+
+      navigate("/send-money", { state: { user: foundUser } });
     } catch (err) {
       setError(err.response?.data?.message || "Not Found");
     } finally {
@@ -48,33 +52,42 @@ const ScanQR = () => {
     const qr = new Html5Qrcode("scanner");
     qrRef.current = qr;
 
-    qr.start({ facingMode: "environment" }, { fps: 10 }, (decodedText) => {
-      setUpiId(decodedText);
-    }).catch((err) => console.log(err));
+    qr.start(
+      { facingMode: "environment" },
+      { fps: 10 },
+      async (decodedText) => {
+        if (qrRef.current?.isScanning) {
+          await qrRef.current.stop();
+        }
 
-    return () => {
-      if (qrRef.current?.isScanning) {
-        qrRef.current.stop();
-      }
-    };
-  }, []);
-
-  useEffect(() => {
-    if (upiId.length === 0) {
-      setSearchResults([]);
-      return;
-    }
-    callSearchApi().then(() =>
-      navigate("/send-money", { state: { user: searchResults[0] } }),
+        callSearchApi(decodedText);
+      },
+      (errorMessage) => {
+        console.log("SCAN ERROR:", errorMessage);
+      },
     );
-  }, [upiId]);
+  }, []);
 
   if (loading) {
     return <Loading />;
   }
 
   if (error) {
-    return <ErrorScreen error={error} />;
+    return (
+      <div className="bg-[#0B0F1A] flex flex-col items-center justify-center h-screen w-full px-5 gap-10">
+        <h1 className="text-xl leading-6 text-white text-center font-urbanist font-medium">
+          We encountered an issue processing your request. Kindly select an
+          alternative option.
+        </h1>
+        <div className="gap-4 flex flex-col w-full">
+          <Button
+            label={"Via Phone Number"}
+            onClick={() => navigate("/phone-pay")}
+          />
+          <Button label={"Via UPI ID"} onClick={() => navigate("/upi-pay")} />
+        </div>
+      </div>
+    );
   }
 
   return (
