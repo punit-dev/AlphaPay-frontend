@@ -64,7 +64,7 @@ const ScanQR = () => {
             callSearchApi(decodedText);
           },
           (errorMessage) => {
-            console.log(error message)
+            console.log(errorMessage)
           }
         );
       } catch (err) {
