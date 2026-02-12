@@ -11,6 +11,7 @@ import SplashScreen from "./screens/SplashScreen";
 import PhonePay from "./screens/PhonePay";
 import UpiPay from "./screens/UpiPay";
 import ScanQR from "./screens/ScanQR";
+import Profile from "./screens/Profile";
 
 const App = () => {
   const location = useLocation();
@@ -22,6 +23,10 @@ const App = () => {
         <Route path="/" element={<SplashScreen />} />
         <Route path="/authentication" element={<Authentication />} />
         <Route path="/home" element={<ProtectedRoute children={<Home />} />} />
+        <Route
+          path="/profile"
+          element={<ProtectedRoute children={<Profile />} />}
+        />
         <Route
           path="/balance-hist"
           element={<ProtectedRoute children={<BalanceHist />} />}

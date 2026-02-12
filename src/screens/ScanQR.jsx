@@ -82,9 +82,12 @@ const ScanQR = () => {
         <div className="gap-4 flex flex-col w-full">
           <Button
             label={"Via Phone Number"}
-            onClick={() => navigate("/phone-pay")}
+            onClick={() => navigate("/phone-pay", { replace: true })}
           />
-          <Button label={"Via UPI ID"} onClick={() => navigate("/upi-pay")} />
+          <Button
+            label={"Via UPI ID"}
+            onClick={() => navigate("/upi-pay", { replace: true })}
+          />
         </div>
       </div>
     );

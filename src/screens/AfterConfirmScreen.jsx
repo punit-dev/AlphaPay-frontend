@@ -127,7 +127,10 @@ const AfterConfirmScreen = ({ title, loading = false, user, amount }) => {
           <ProfileView user={user} />
         </div>
         <div className="px-5 mt-10">
-          <Button label="Go Back to Home" onClick={() => navigate("/home")} />
+          <Button
+            label="Go Back to Home"
+            onClick={() => navigate("/home", { replace: true })}
+          />
         </div>
       </div>
     </div>

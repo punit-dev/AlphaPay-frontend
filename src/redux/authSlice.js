@@ -67,11 +67,18 @@ const logoutUser = createAsyncThunk("auth/logoutUser", async (_, thunkAPI) => {
   try {
     const res = await axios.post(
       `${import.meta.env.VITE_BASE_URL}/auth/logout`,
+      _,
       {
         withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
       },
     );
-    return res.data;
+
+    if (res.status == 200) {
+      return window.location.replace("/authentication");
+    }
   } catch (err) {
     return thunkAPI.rejectWithValue(err.response.data);
   }
