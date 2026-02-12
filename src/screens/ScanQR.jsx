@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
-
 import { Html5Qrcode } from "html5-qrcode";
+import axios from "axios";
 import SecondaryNav from "../components/SecondaryNav";
 import { motion } from "motion/react";
 import { useSelector } from "react-redux";
@@ -10,17 +10,15 @@ import { useNavigate } from "react-router";
 
 const ScanQR = () => {
   const qrRef = useRef(null);
-  const isMountedRef = useRef(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-
-  const { user } = useSelector((state) => state.auth);
   const navigate = useNavigate();
 
   const callSearchApi = async (decodedText) => {
     try {
-      setError(null);
       setLoading(true);
+      setError(null);
+
       const res = await axios.get(
         `${import.meta.env.VITE_BASE_URL}/search?query=${decodedText}`,
         {
@@ -28,49 +26,64 @@ const ScanQR = () => {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
-        },
+        }
       );
-      const foundUser = res.data.results[0];
+
+      const foundUser = res.data.results?.[0];
 
       if (!foundUser) {
         setError("User Not Found");
+        return;
       }
 
       navigate("/send-money", { state: { user: foundUser } });
     } catch (err) {
-      setError(err.response?.data?.message || "Not Found");
+      console.error("API Error:", err);
+      setError(err.response?.data?.message || "User Search Failed");
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    if (isMountedRef.current) return;
+    const html5QrCode = new Html5Qrcode("scanner");
+    qrRef.current = html5QrCode;
 
-    isMountedRef.current = true;
+    const startScanner = async () => {
+      try {
+        await html5QrCode.start(
+          { facingMode: "environment" },
+          { fps: 10 },
+          async (decodedText) => {
+            // Success! Stop scanner first to avoid double-calls
+            try {
+              await qrRef.current.stop();
+            } catch (stopErr) {
+              console.warn("Scanner stop warning:", stopErr);
+            }
+            callSearchApi(decodedText);
+          },
+          (errorMessage) => {
+            console.log(error message)
+          }
+        );
+      } catch (err) {
+        console.error("Scanner Start Error:", err);
+        setError("Camera permission denied or not found.");
+      }
+    };
 
-    const qr = new Html5Qrcode("scanner");
-    qrRef.current = qr;
+    startScanner();
 
-    qr.start(
-      { facingMode: "environment" },
-      { fps: 10 },
-      async (decodedText) => {
-        if (qrRef.current?.isScanning) {
-          await qrRef.current.stop();
-        }
-
-        callSearchApi(decodedText);
-      },
-      (errorMessage) => {
-        console.log("SCAN ERROR:", errorMessage);
-      },
-    );
+    // Cleanup: Stop scanner when component unmounts
+    return () => {
+      if (qrRef.current && qrRef.current.isScanning) {
+        qrRef.current.stop().catch(e => console.error("Cleanup error", e));
+      }
+    };
   }, []);
 
-  if (loading) {
-    return <Loading />;
-  }
+  if (loading) return <Loading />;
 
   if (error) {
     return (
