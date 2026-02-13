@@ -9,6 +9,12 @@ const TransactionDiv = ({
   status,
   onClick,
 }) => {
+  const statusObj = {
+    pending: "#FFB100",
+    failed: "#FF4C4C",
+    success: "#00FFAE",
+  };
+
   return (
     <div
       onClick={onClick}
@@ -32,7 +38,7 @@ const TransactionDiv = ({
       <p
         className="text-xl font-medium"
         style={{
-          color: status == "FAILED" ? "#FF4C4C" : "#00FFAE",
+          color: statusObj[status.toLowerCase()],
         }}>
         {toSentenceCase(status)}
       </p>

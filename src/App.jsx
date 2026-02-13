@@ -16,6 +16,7 @@ import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import socket from "./socket";
 import Notification from "./screens/Notification";
+import RequestMoney from "./screens/RequestMoney";
 
 const App = () => {
   const location = useLocation();
@@ -78,6 +79,10 @@ const App = () => {
         <Route
           path="/notifications"
           element={<ProtectedRoute children={<Notification />} />}
+        />
+        <Route
+          path="/request-money"
+          element={<ProtectedRoute children={<RequestMoney />} />}
         />
         <Route path="*" element={<Navigate to="/splash" replace />} />
       </Routes>

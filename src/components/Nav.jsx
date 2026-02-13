@@ -6,7 +6,7 @@ const Nav = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="px-7">
+    <div className="px-5">
       <nav className="w-full flex items-center justify-between py-3 text-white">
         <IoPersonSharp
           className="h-8 w-8"

@@ -89,6 +89,9 @@ const Home = () => {
     {
       label: "Requests",
       scr: "./icons/request_money.svg",
+      onClick: (e) => {
+        navigate("/request-money");
+      },
     },
     {
       label: "Balance & history",
