@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import QRCodeStyling from "qr-code-styling";
 import { motion } from "motion/react";
-import SearchInput from "../components/SearchInput";
+import socket from "../socket";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchTransactions } from "../redux/transactionSlice";
 import SectionDiv from "../components/SectionDiv";
@@ -10,6 +10,7 @@ import SecondarySectionDiv from "../components/SecondarySectionDiv";
 import ProfileDiv from "../components/ProfileDiv";
 import { useNavigate } from "react-router";
 import ProfileView from "../components/ProfileView";
+import { appendNotification } from "../redux/notificationSlice";
 
 const Home = () => {
   const qrRef = useRef(null);
@@ -53,6 +54,13 @@ const Home = () => {
       qrCode.append(qrRef.current);
     }
   });
+
+  useEffect(() => {
+    socket.on("tran", (data) => {
+      appendNotification(data);
+      dispatch(fetchTransactions(3));
+    });
+  }, []);
 
   const navigate = useNavigate();
 

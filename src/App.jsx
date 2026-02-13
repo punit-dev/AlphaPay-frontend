@@ -12,9 +12,29 @@ import PhonePay from "./screens/PhonePay";
 import UpiPay from "./screens/UpiPay";
 import ScanQR from "./screens/ScanQR";
 import Profile from "./screens/Profile";
+import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import socket from "./socket";
+import Notification from "./screens/Notification";
 
 const App = () => {
   const location = useLocation();
+
+  const { user } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    if (!user?._id) return;
+
+    socket.on("connect", () => {
+      console.log("Connected: ", socket.id);
+
+      socket.emit("add", user._id);
+    });
+
+    return () => {
+      socket.off("connect");
+    };
+  }, [user]);
 
   return (
     <div className="bg-linear-140 from-[#342952] via-[#0B0F1A] via-40% to-[#00AFFF] to-300% w-full h-screen overflow-hidden">
@@ -54,6 +74,10 @@ const App = () => {
         <Route
           path="/confirm-pay"
           element={<ProtectedRoute children={<ConfirmPay />} />}
+        />
+        <Route
+          path="/notifications"
+          element={<ProtectedRoute children={<Notification />} />}
         />
         <Route path="*" element={<Navigate to="/splash" replace />} />
       </Routes>
