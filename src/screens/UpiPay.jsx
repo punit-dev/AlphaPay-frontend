@@ -5,49 +5,15 @@ import { useSelector } from "react-redux";
 import ProfileForSend from "../components/ProfileForSend";
 import axios from "axios";
 import { useNavigate } from "react-router";
+import useSearchUser from "../hooks/useSearchUser";
 
 const UpiPay = () => {
   const [searchVal, setSearchVal] = useState("");
   const [selected, setSelected] = useState(false);
-  const [searchResults, setSearchResults] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const { searchResults, loading, error } = useSearchUser(searchVal);
 
   const { user } = useSelector((state) => state.auth);
   const navigate = useNavigate();
-
-  const callSearchApi = async () => {
-    try {
-      setError(null);
-      setLoading(true);
-      const res = await axios.get(
-        `${import.meta.env.VITE_BASE_URL}/search?query=${searchVal}`,
-        {
-          withCredentials: true,
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        },
-      );
-      setSearchResults(res.data.results);
-    } catch (err) {
-      setError(err.response?.data?.message || "Not Found");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    if (searchVal.length === 0 || searchVal.length < 3) {
-      setSearchResults([]);
-      return;
-    }
-    const delayDebounceFn = setTimeout(() => {
-      callSearchApi();
-    }, 500);
-
-    return () => clearTimeout(delayDebounceFn);
-  }, [searchVal]);
 
   return (
     <div className="bg-[#0B0F1A] h-screen w-full">
@@ -79,19 +45,18 @@ const UpiPay = () => {
               {error}
             </p>
           ) : (
-            searchResults.map((profile) =>
-              profile._id === user._id ? null : (
-                <ProfileForSend
-                  key={profile._id}
-                  profilePic={profile.profilePic}
-                  fullname={profile.fullname}
-                  id={profile.upiId}
-                  onClick={(e) => {
-                    navigate("/send-money", { state: { user: profile } });
-                  }}
-                />
-              ),
-            )
+            searchResults.map((profile) => (
+              <ProfileForSend
+                key={profile._id}
+                profilePic={profile.profilePic}
+                fullname={profile.fullname}
+                id={profile.upiId}
+                onClick={(e) => {
+                  navigate("/send-money", { state: { user: profile } });
+                }}
+                showBtn={profile._id !== user._id}
+              />
+            ))
           )}
         </div>
       </div>

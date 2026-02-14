@@ -1,9 +1,17 @@
 import React, { useState } from "react";
 import { motion } from "motion/react";
 
-const RequestInput = ({ type, placeholder, label, name, id }) => {
+const RequestInput = ({
+  type,
+  placeholder,
+  label,
+  name,
+  id,
+  value,
+  setValue,
+  onChange = () => {},
+}) => {
   const [selected, setSelected] = useState(false);
-  const [value, setValue] = useState("");
 
   return (
     <motion.div
@@ -28,7 +36,10 @@ const RequestInput = ({ type, placeholder, label, name, id }) => {
         name={name}
         id={id}
         value={value}
-        onChange={(e) => setValue(e.target.value)}
+        onChange={(e) => {
+          setValue(e.target.value);
+          onChange();
+        }}
         onSelect={() => setSelected(true)}
         onBlur={() => setSelected(false)}
         placeholder={placeholder}

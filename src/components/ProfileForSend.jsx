@@ -1,8 +1,25 @@
 import React from "react";
+import { useSelector } from "react-redux";
 
-const ProfileForSend = ({ profilePic, fullname, id, onClick = () => {} }) => {
+const ProfileForSend = ({
+  profilePic,
+  fullname,
+  id,
+  onClick = () => {},
+  showBtn = true,
+}) => {
+  const { user } = useSelector((state) => state.auth);
+
   return (
-    <div className="flex py-3 px-5 items-center gap-4 bg-[#161B26] rounded-2xl mt-4">
+    <div
+      onClick={() => {
+        if (id == user.phoneNumber || id == user.upiId) {
+          alert(
+            "Looks like you selected yourself — please choose another user.",
+          );
+        }
+      }}
+      className="flex py-3 px-5 items-center gap-4 bg-[#161B26] rounded-2xl mt-4">
       <img
         src={profilePic}
         alt="Profile"
@@ -14,11 +31,13 @@ const ProfileForSend = ({ profilePic, fullname, id, onClick = () => {} }) => {
         </span>
         <span className="text-white font-urbanist text-sm">{id || "ID"}</span>
       </div>
-      <button
-        onClick={onClick}
-        className="ml-auto bg-[#00AFFF] text-[#0B0F1A] px-4 py-2 rounded-lg font-urbanist font-bold text-sm">
-        Send
-      </button>
+      {showBtn && (
+        <button
+          onClick={onClick}
+          className="ml-auto bg-[#00AFFF] text-[#0B0F1A] px-4 py-2 rounded-lg font-urbanist font-bold text-sm">
+          Send
+        </button>
+      )}
     </div>
   );
 };
