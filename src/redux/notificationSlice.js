@@ -28,7 +28,7 @@ const markAsRead = createAsyncThunk(
     try {
       const res = await axios.put(
         `${import.meta.env.VITE_BASE_URL}/notifications/mark-as-read?notificationId=${notificationId}`,
-        _,
+        {},
         {
           withCredentials: true,
           headers: {
@@ -63,12 +63,18 @@ const notificationSlice = createSlice({
   name: "notification",
   initialState: {
     notifications: [],
+    count: localStorage.getItem("notifyCount") || 0,
     loading: false,
     error: null,
   },
   reducers: {
     appendNotification: (state, action) => {
       state.notifications.unshift(action.payload);
+      state.count += 1;
+      localStorage.setItem("notifyCount", state.count);
+    },
+    clearCount: (state) => {
+      state.count = 0;
     },
   },
   extraReducers: (builder) => {
@@ -111,5 +117,5 @@ const notificationSlice = createSlice({
 });
 
 export default notificationSlice.reducer;
-export const { appendNotification } = notificationSlice.actions;
+export const { appendNotification, clearCount } = notificationSlice.actions;
 export { fetchNotification, markAsRead, deleteNotification };

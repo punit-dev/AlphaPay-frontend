@@ -11,7 +11,7 @@ import Loading from "./Loading";
 
 const BalanceHist = () => {
   const { user } = useSelector((state) => state.auth);
-  const { transactions, loading, error, balance } = useSelector(
+  const { transactions, loading, error, balance, expenses } = useSelector(
     (state) => state.transactions,
   );
 
@@ -34,8 +34,23 @@ const BalanceHist = () => {
     <div className="bg-[#0B0F1A] h-screen w-full">
       <SecondaryNav title={"Balance & history"} />
       <div className="px-5 pt-10">
-        <BalanceDiv from={0} to={balance} />
-        <div className="overflow-y-auto w-full max-h-120 flex flex-col mt-8">
+        <BalanceDiv
+          from={0}
+          to={balance}
+          label={"Total money"}
+          src={"./images/wallet.png"}
+        />
+        <div className="mt-5">
+          <BalanceDiv
+            from={0}
+            to={expenses}
+            bgColor={"#B6FFC7"}
+            shadow={"#B6FFC78e"}
+            label={"Today expenses"}
+            src={"./images/expenses.svg"}
+          />
+        </div>
+        <div className="overflow-y-auto w-full max-h-85 flex flex-col mt-8">
           {groupedTransactions.map((group) => (
             <SecondarySectionDiv
               key={group.date}

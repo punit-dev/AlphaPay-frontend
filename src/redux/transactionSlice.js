@@ -71,6 +71,7 @@ const transactionSlice = createSlice({
     transactions: [],
     txn: null,
     balance: 0,
+    expenses: 0,
     status: "Processing",
     loading: false,
     error: null,
@@ -84,6 +85,7 @@ const transactionSlice = createSlice({
       .addCase(fetchTransactions.fulfilled, (state, action) => {
         state.transactions = action.payload.allTransactions;
         state.balance = action.payload.currentBalance;
+        state.expenses = action.payload.expenses;
         state.loading = false;
       })
       .addCase(fetchTransactions.rejected, (state, action) => {

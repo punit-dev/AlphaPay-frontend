@@ -27,8 +27,6 @@ const App = () => {
     if (!user?._id) return;
 
     socket.on("connect", () => {
-      console.log("Connected: ", socket.id);
-
       socket.emit("add", user._id);
     });
 

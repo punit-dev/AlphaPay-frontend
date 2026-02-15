@@ -57,9 +57,17 @@ const Home = () => {
 
   useEffect(() => {
     socket.on("tran", (data) => {
-      appendNotification(data);
+      dispatch(appendNotification(data));
       dispatch(fetchTransactions(3));
     });
+    socket.on("request", (data) => {
+      dispatch(appendNotification(data));
+    });
+
+    return () => {
+      socket.off("tran");
+      socket.off("request");
+    };
   }, []);
 
   const navigate = useNavigate();

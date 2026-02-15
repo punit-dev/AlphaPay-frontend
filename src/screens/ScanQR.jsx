@@ -26,7 +26,7 @@ const ScanQR = () => {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
-        }
+        },
       );
 
       const foundUser = res.data.results?.[0];
@@ -64,8 +64,8 @@ const ScanQR = () => {
             callSearchApi(decodedText);
           },
           (errorMessage) => {
-            console.log(errorMessage)
-          }
+            console.error(errorMessage);
+          },
         );
       } catch (err) {
         console.error("Scanner Start Error:", err);
@@ -78,7 +78,7 @@ const ScanQR = () => {
     // Cleanup: Stop scanner when component unmounts
     return () => {
       if (qrRef.current && qrRef.current.isScanning) {
-        qrRef.current.stop().catch(e => console.error("Cleanup error", e));
+        qrRef.current.stop().catch((e) => console.error("Cleanup error", e));
       }
     };
   }, []);
