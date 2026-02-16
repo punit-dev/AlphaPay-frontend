@@ -28,15 +28,19 @@ const useSearchUser = (searchVal) => {
   };
 
   useEffect(() => {
-    if (searchVal.length === 0 || searchVal.length <= 3) {
+    const controller = new AbortController();
+    if (searchVal.length <= 3) {
       setSearchResults([]);
       return;
     }
     const delayDebounceFn = setTimeout(() => {
-      callSearchApi();
+      callSearchApi(controller.signal);
     }, 500);
 
-    return () => clearTimeout(delayDebounceFn);
+    return () => {
+      clearTimeout(delayDebounceFn);
+      controller.abort();
+    };
   }, [searchVal]);
 
   return { searchResults, loading, error };

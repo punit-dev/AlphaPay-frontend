@@ -3,87 +3,112 @@ import { Html5Qrcode } from "html5-qrcode";
 import axios from "axios";
 import SecondaryNav from "../components/SecondaryNav";
 import { motion } from "motion/react";
-import { useSelector } from "react-redux";
 import Loading from "./Loading";
 import Button from "../components/Button";
 import { useNavigate } from "react-router";
+import useSearchUser from "../hooks/useSearchUser";
 
 const ScanQR = () => {
   const qrRef = useRef(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [decodedTxt, setDecodedTxt] = useState("");
+  const [camError, setCamError] = useState(null);
   const navigate = useNavigate();
+  const hasScannedRef = useRef(false);
 
-  const callSearchApi = async (decodedText) => {
+  const { searchResults, loading, error } = useSearchUser(decodedTxt);
+
+  const startScanner = async () => {
+    if (!qrRef.current) return;
     try {
-      setLoading(true);
-      setError(null);
+      await qrRef.current.start(
+        { facingMode: "environment" },
+        { fps: 10 },
+        async (decodedText) => {
+          if (hasScannedRef.current) return;
+          hasScannedRef.current = true;
 
-      const res = await axios.get(
-        `${import.meta.env.VITE_BASE_URL}/search?query=${decodedText}`,
-        {
-          withCredentials: true,
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
+          try {
+            const state = qrRef.current.getState();
+            if (state === 2 || state === 3) {
+              await qrRef.current.stop();
+            }
+          } catch (err) {
+            console.warn("Stop warning:", err);
+          }
+          setDecodedTxt(decodedText);
         },
+        () => {},
       );
-
-      const foundUser = res.data.results?.[0];
-
-      if (!foundUser) {
-        setError("User Not Found");
-        return;
-      }
-
-      navigate("/send-money", { state: { user: foundUser } });
     } catch (err) {
-      console.error("API Error:", err);
-      setError(err.response?.data?.message || "User Search Failed");
-    } finally {
-      setLoading(false);
+      console.error("Scanner Start Error:", err);
+
+      if (err?.name === "NotAllowedError") {
+        setCamError("Camera permission denied. Please allow access.");
+      } else {
+        setCamError("Unable to access camera.");
+      }
     }
   };
+
+  const restartScanner = async () => {
+    hasScannedRef.current = false;
+    setDecodedTxt("");
+    setCamError(null);
+
+    try {
+      const state = qrRef.current?.getState();
+      if (state === 2 || state === 3) {
+        await qrRef.current.stop();
+      }
+    } catch {}
+
+    await startScanner();
+  };
+
+  useEffect(() => {
+    if (!decodedTxt || loading) return;
+
+    const foundUser = searchResults?.[0];
+
+    if (!foundUser) {
+      hasScannedRef.current = false;
+      return;
+    }
+
+    navigate("/send-money", {
+      state: { user: foundUser },
+      replace: true,
+    });
+  }, [searchResults, loading, decodedTxt, navigate]);
 
   useEffect(() => {
     const html5QrCode = new Html5Qrcode("scanner");
     qrRef.current = html5QrCode;
 
-    const startScanner = async () => {
-      try {
-        await html5QrCode.start(
-          { facingMode: "environment" },
-          { fps: 10 },
-          async (decodedText) => {
-            // Success! Stop scanner first to avoid double-calls
-            try {
-              await qrRef.current.stop();
-            } catch (stopErr) {
-              console.warn("Scanner stop warning:", stopErr);
-            }
-            callSearchApi(decodedText);
-          },
-          (errorMessage) => {
-            console.error(errorMessage);
-          },
-        );
-      } catch (err) {
-        console.error("Scanner Start Error:", err);
-        setError("Camera permission denied or not found.");
-      }
-    };
-
     startScanner();
 
-    // Cleanup: Stop scanner when component unmounts
     return () => {
-      if (qrRef.current && qrRef.current.isScanning) {
-        qrRef.current.stop().catch((e) => console.error("Cleanup error", e));
+      const scannerInstance = qrRef.current;
+      if (scannerInstance) {
+        const state = scannerInstance.getState();
+        if (state === 2 || state === 3) {
+          scannerInstance
+            .stop()
+            .then(() => scannerInstance.clear())
+            .catch((err) => console.warn("Cleanup error:", err));
+        }
       }
     };
   }, []);
 
-  if (loading) return <Loading />;
+  if (camError) {
+    return (
+      <div className="bg-black flex flex-col items-center justify-center h-screen text-white gap-6 px-6">
+        <h2 className="text-lg text-center">{camError}</h2>
+        <Button label="Try Again" onClick={restartScanner} />
+      </div>
+    );
+  }
 
   if (error) {
     return (
@@ -108,6 +133,11 @@ const ScanQR = () => {
 
   return (
     <div className="h-screen w-full bg-black relative overflow-hidden">
+      {loading && (
+        <div className="absolute inset-0 z-50 bg-black/80 flex items-center justify-center">
+          <Loading />
+        </div>
+      )}
       <SecondaryNav title={"Scan QR code"} />
 
       <div id="scanner" className="absolute inset-0 overflow-hidden h-[92%]" />
