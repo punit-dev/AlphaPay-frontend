@@ -75,6 +75,7 @@ const notificationSlice = createSlice({
     },
     clearCount: (state) => {
       state.count = 0;
+      localStorage.setItem("notifyCount", state.count);
     },
   },
   extraReducers: (builder) => {

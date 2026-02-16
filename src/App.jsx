@@ -13,15 +13,26 @@ import UpiPay from "./screens/UpiPay";
 import ScanQR from "./screens/ScanQR";
 import Profile from "./screens/Profile";
 import { useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import socket from "./socket";
 import Notification from "./screens/Notification";
 import RequestMoney from "./screens/RequestMoney";
+import ErrorScreen from "./screens/ErrorScreen";
 
 const App = () => {
   const location = useLocation();
+  const [isTooWide, setIsTooWide] = useState(window.innerWidth > 425);
 
   const { user } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsTooWide(window.innerWidth > 425);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     if (!user?._id) return;
@@ -34,6 +45,12 @@ const App = () => {
       socket.off("connect");
     };
   }, [user]);
+
+  if (isTooWide) {
+    return (
+      <ErrorScreen error="Screen Size Unsupported. To ensure a seamless experience, this app is only accessible via mobile devices." />
+    );
+  }
 
   return (
     <div className="bg-linear-140 from-[#342952] via-[#0B0F1A] via-40% to-[#00AFFF] to-300% w-full h-screen overflow-hidden">

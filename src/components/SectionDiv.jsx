@@ -8,9 +8,9 @@ const SectionDiv = ({ label, icons }) => {
           </p>
         </div>
       </div>
-      <div className="min-h-30 w-full bg-[#202224] bg-linear-90 from-[#00AFFF] to-[#A27EFF] p-0.5 rounded-b-lg rounded-tr-lg font-lexend">
+      <div className="min-h-30 w-full max-w-80 bg-[#202224] bg-linear-90 from-[#00AFFF] to-[#A27EFF] p-0.5 rounded-b-lg rounded-tr-lg font-lexend">
         <div className="min-h-30 w-full bg-[#202224] rounded-b-lg rounded-tr-lg p-1.5">
-          <div className="min-h-30 w-full bg-black rounded-lg flex flex-wrap gap-7.25 px-3 py-4 items-center">
+          <div className="min-h-30 w-full bg-black rounded-lg flex flex-wrap gap-8 px-2 py-4 items-center">
             {icons}
           </div>
         </div>

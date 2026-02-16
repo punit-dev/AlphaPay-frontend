@@ -34,7 +34,7 @@ const SecondarySectionDiv = ({
         </div>
       </div>
       <div
-        className={`min-h-30 w-full border-2 border-b-transparent border-x-transparent ${border ? "border-t-[#00AFFF]" : "border-t-[#202224]"} border-t-[#00AFFF] p-0.5 font-lexend`}>
+        className={`min-h-30 w-full max-w-80 border-2 border-b-transparent border-x-transparent ${border ? "border-t-[#00AFFF]" : "border-t-[#202224]"} border-t-[#00AFFF] p-0.5 font-lexend`}>
         <div
           className={`mt-3 ${background ? "bg-[#0B0F1A]" : "bg-transparent"} min-h-30 w-full rounded-lg flex flex-col gap-2`}>
           {background ? (

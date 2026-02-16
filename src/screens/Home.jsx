@@ -154,7 +154,7 @@ const Home = () => {
             setIsOpen(true);
           }
         }}
-        className="absolute h-screen w-full bg-white/10 backdrop-blur-xl rounded-t-3xl px-5 top-0 z-1"
+        className="absolute h-screen w-full bg-white/10 backdrop-blur-xl rounded-t-3xl px-5 top-0 z-1 flex flex-col items-center"
         style={{
           overflowY: isOpen ? "auto" : "hidden",
         }}>
