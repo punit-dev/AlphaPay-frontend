@@ -63,7 +63,7 @@ const notificationSlice = createSlice({
   name: "notification",
   initialState: {
     notifications: [],
-    count: localStorage.getItem("notifyCount") || 0,
+    count: parseInt(localStorage.getItem("notifyCount")) || 0,
     loading: false,
     error: null,
   },
