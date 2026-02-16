@@ -49,7 +49,7 @@ export default defineConfig({
       },
 
       manifest: {
-        name: "AlphaPay - Digital Payment App",
+        name: "AlphaPay",
         short_name: "AlphaPay",
         description: "Secure and fast digital wallet.",
         theme_color: "#0B0F1A",
