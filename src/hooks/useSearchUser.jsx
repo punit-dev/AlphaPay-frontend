@@ -5,6 +5,7 @@ const useSearchUser = (searchVal) => {
   const [searchResults, setSearchResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [lastValue, setLastValue] = useState("");
 
   const callSearchApi = async () => {
     try {
@@ -28,13 +29,15 @@ const useSearchUser = (searchVal) => {
   };
 
   useEffect(() => {
-    const controller = new AbortController();
-    if (searchVal.length <= 3) {
+    if (searchVal.length <= 3 || searchVal === lastValue) {
       setSearchResults([]);
       return;
     }
+
+    const controller = new AbortController();
     const delayDebounceFn = setTimeout(() => {
-      callSearchApi(controller.signal);
+      setLastValue(searchVal);
+      callSearchApi();
     }, 500);
 
     return () => {

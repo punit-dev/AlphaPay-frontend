@@ -24,17 +24,19 @@ const ScanQR = () => {
         { facingMode: "environment" },
         { fps: 10 },
         async (decodedText) => {
-          if (hasScannedRef.current) return;
+          if (hasScannedRef.current || decodedText === decodedTxt) return;
+
           hasScannedRef.current = true;
 
           try {
             const state = qrRef.current.getState();
-            if (state === 2 || state === 3) {
-              await qrRef.current.stop();
+            if (state === 2) {
+              await qrRef.current.pause();
             }
           } catch (err) {
-            console.warn("Stop warning:", err);
+            console.warn("Pause warning:", err);
           }
+
           setDecodedTxt(decodedText);
         },
         () => {},
