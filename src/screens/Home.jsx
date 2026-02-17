@@ -58,7 +58,7 @@ const Home = () => {
   useEffect(() => {
     socket.on("tran", (data) => {
       dispatch(appendNotification(data));
-      dispatch(fetchTransactions(3));
+      dispatch(appendTransaction(data.data.transaction));
     });
     socket.on("request", (data) => {
       dispatch(appendNotification(data));
