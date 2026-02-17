@@ -7,21 +7,23 @@ const useSearchUser = (searchVal) => {
   const [error, setError] = useState(null);
   const [lastValue, setLastValue] = useState("");
 
-  const callSearchApi = async () => {
+  const callSearchApi = async (value, signal) => {
     try {
       setError(null);
       setLoading(true);
       const res = await axios.get(
-        `${import.meta.env.VITE_BASE_URL}/search?query=${searchVal}`,
+        `${import.meta.env.VITE_BASE_URL}/search?query=${value}`,
         {
           withCredentials: true,
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
+          signal,
         },
       );
       setSearchResults(res.data.results);
     } catch (err) {
+      if (err.name === "CanceledError") return;
       setError(err.response?.data?.message || "Not Found");
     } finally {
       setLoading(false);
@@ -35,9 +37,10 @@ const useSearchUser = (searchVal) => {
     }
 
     const controller = new AbortController();
+
     const delayDebounceFn = setTimeout(() => {
       setLastValue(searchVal);
-      callSearchApi();
+      callSearchApi(searchVal, controller.signal);
     }, 500);
 
     return () => {
