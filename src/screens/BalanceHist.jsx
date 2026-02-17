@@ -57,7 +57,7 @@ const BalanceHist = () => {
               background={false}
               label={group.formattedDate}
               border={true}>
-              {group.transactions.map((transaction) => (
+              {group.items.map((transaction) => (
                 <TransactionDiv
                   key={transaction._id}
                   amount={

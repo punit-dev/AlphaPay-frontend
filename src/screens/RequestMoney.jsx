@@ -2,13 +2,16 @@ import React, { useEffect, useState } from "react";
 import SecondaryNav from "../components/SecondaryNav";
 import RequestInput from "../components/RequestInput";
 import Button from "../components/Button";
+import { useDispatch, useSelector } from "react-redux";
+import useSearchUser from "../hooks/useSearchUser";
+import ProfileForSend from "../components/ProfileForSend";
 import SecondarySectionDiv from "../components/SecondarySectionDiv";
 import TransactionDiv from "../components/TransactionDiv";
 import { groupTransactionsByDate } from "../utils/transactionUtils";
-import { useSelector } from "react-redux";
-import AfterRequestSent from "./AfterRequestSent";
-import useSearchUser from "../hooks/useSearchUser";
-import ProfileForSend from "../components/ProfileForSend";
+import { fetchReq, makeReq } from "../redux/requestSlice";
+import Loading from "./Loading";
+import ErrorScreen from "./ErrorScreen";
+import { useNavigate } from "react-router";
 
 const RequestMoney = () => {
   const { user } = useSelector((state) => state.auth);
@@ -16,80 +19,39 @@ const RequestMoney = () => {
   const [amount, setAmount] = useState("");
   const [note, setNote] = useState("");
   const [isShow, setIsShow] = useState(true);
+  const [userData, setUserData] = useState({});
   const { searchResults, loading, error } = useSearchUser(searchVal);
+  const { request, isLoading, err, requests } = useSelector(
+    (state) => state.request,
+  );
+  const navigate = useNavigate();
 
-  const groupedTransactions = groupTransactionsByDate([
-    {
-      _id: "1",
-      payer: {
-        userRef: {
-          _id: "user123",
-          fullname: "John Doe",
-          profilePic: "https://alphapay.onrender.com/assets/avatar/male3.png",
-        },
-        name: "John",
-      },
-      payee: {
-        userRef: {
-          _id: "user456",
-          profilePic: "https://alphapay.onrender.com/assets/avatar/female3.png",
-        },
-        name: "Alice Smith",
-      },
-      amount: 500,
-      status: "success",
-      createdAt: new Date().toISOString(),
-    },
-    {
-      _id: "2",
-      payer: {
-        userRef: {
-          _id: "user456",
-          fullname: "Alice Smith",
-          profilePic: "https://alphapay.onrender.com/assets/avatar/female3.png",
-        },
-        name: "Alice",
-      },
-      payee: {
-        userRef: {
-          _id: "user123",
-          profilePic: "https://alphapay.onrender.com/assets/avatar/male3.png",
-        },
-        name: "John Doe",
-      },
-      amount: 1200,
-      status: "pending",
-      createdAt: new Date(Date.now() - 86400000).toISOString(),
-    },
-    {
-      _id: "3",
-      payer: {
-        userRef: {
-          _id: "user456",
-          fullname: "Alice Smith",
-          profilePic: "https://alphapay.onrender.com/assets/avatar/female3.png",
-        },
-        name: "Alice",
-      },
-      payee: {
-        userRef: {
-          _id: "user123",
-          profilePic: "https://alphapay.onrender.com/assets/avatar/male3.png",
-        },
-        name: "John Doe",
-      },
-      amount: 1200,
-      status: "Failed",
-      createdAt: new Date(Date.now() - 86400000).toISOString(),
-    },
-  ]);
+  const dispatch = useDispatch();
 
-  const handleForm = (e) => {
+  const groupedRequests = groupTransactionsByDate(requests);
+
+  const handleForm = async (e) => {
     e.preventDefault();
+    const data = { payerId: userData.id, amount, message: note };
+    dispatch(makeReq(data));
+    if (!isLoading && !err) {
+      navigate("/request-money/done", {
+        state: { amount, user: userData, message: note, reqId: request?._id },
+        replace: true,
+      });
+    }
   };
 
-  if (false) {
-    return <AfterRequestSent />;
+  useEffect(() => {
+    dispatch(fetchReq());
+  }, [dispatch]);
+
+  if (isLoading) {
+    return <Loading />;
+  }
+
+  if (err) {
+    return <ErrorScreen error={err} />;
   }
 
   return (
@@ -148,6 +110,12 @@ const RequestMoney = () => {
                                 setSearchVal(profile.upiId);
                                 setIsShow(false);
                               }
+                              setUserData({
+                                id: profile._id,
+                                fullname: profile.fullname,
+                                upiId: profile.upiId,
+                                profilePic: profile.profilePic,
+                              });
                             }}
                             showBtn={profile._id !== user._id}
                           />
@@ -177,37 +145,32 @@ const RequestMoney = () => {
               </div>
             </div>
           </div>
-          <Button
-            label={"Send request"}
-            onClick={(e) => console.log("clicked")}
-          />
+          <Button label={"Send request"} />
         </form>
         <div className="overflow-y-auto w-full max-h-75 flex flex-col">
-          {groupedTransactions.map((group) => (
+          {groupedRequests.map((group) => (
             <SecondarySectionDiv
               key={group.date}
               background={false}
               label={group.formattedDate}
               border={true}>
-              {group.transactions.map((transaction) => (
+              {group.items.map((req, idx) => (
                 <TransactionDiv
-                  key={transaction._id}
-                  amount={"₹" + transaction.amount}
-                  createdAt={transaction.createdAt}
+                  key={req._id || idx} // Use unique ID if available
+                  amount={"₹" + req.amount}
+                  createdAt={req.createdAt}
                   fullname={
-                    transaction.payer.userRef._id == user._id
-                      ? transaction.payee.name
-                      : transaction.payer.userRef.fullname
+                    req.senderId?._id === user._id
+                      ? req.payerId?.fullname
+                      : req.senderId?.fullname
                   }
                   profilePic={
-                    transaction.payer.userRef._id == user._id
-                      ? transaction.payee.userRef.profilePic
-                      : transaction.payer.userRef.profilePic
+                    req.senderId?._id === user._id
+                      ? req.payerId?.profilePic
+                      : req.senderId?.profilePic
                   }
-                  status={transaction.status}
-                  onClick={() => {
-                    navigate(`/balance-hist/${transaction._id}`);
-                  }}
+                  status={req?.status || "pending"} // Provide a fallback
+                  onClick={() => console.log(req._id)}
                 />
               ))}
             </SecondarySectionDiv>

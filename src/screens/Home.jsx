@@ -11,7 +11,7 @@ import ProfileDiv from "../components/ProfileDiv";
 import { useNavigate } from "react-router";
 import ProfileView from "../components/ProfileView";
 import { appendNotification } from "../redux/notificationSlice";
-import {appendTransaction} from "../redux/transactionSlice"
+import { appendTransaction } from "../redux/transactionSlice";
 
 const Home = () => {
   const qrRef = useRef(null);
@@ -112,6 +112,13 @@ const Home = () => {
     {
       label: "Add a card",
       scr: "./icons/add_card.svg",
+    },
+    {
+      label: "Request history",
+      scr: "./icons/request_money_hist.svg",
+      onClick: (e) => {
+        navigate("/request-hist");
+      },
     },
   ];
 

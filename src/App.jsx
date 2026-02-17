@@ -18,6 +18,8 @@ import socket from "./socket";
 import Notification from "./screens/Notification";
 import RequestMoney from "./screens/RequestMoney";
 import ErrorScreen from "./screens/ErrorScreen";
+import AfterRequestSent from "./screens/AfterRequestSent";
+import RequestHist from "./screens/RequestHist";
 
 const App = () => {
   const location = useLocation();
@@ -98,6 +100,14 @@ const App = () => {
         <Route
           path="/request-money"
           element={<ProtectedRoute children={<RequestMoney />} />}
+        />
+        <Route
+          path="/request-money/done"
+          element={<ProtectedRoute children={<AfterRequestSent />} />}
+        />
+        <Route
+          path="/request-hist"
+          element={<ProtectedRoute children={<RequestHist />} />}
         />
         <Route path="*" element={<Navigate to="/splash" replace />} />
       </Routes>

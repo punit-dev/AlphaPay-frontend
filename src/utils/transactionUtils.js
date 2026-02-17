@@ -37,7 +37,7 @@ export const groupTransactionsByDate = (transactions) => {
     .map(([date, transactions]) => ({
       date,
       formattedDate: formatDate(date),
-      transactions: transactions.sort((a, b) => {
+      items: transactions.sort((a, b) => {
         const timeA = new Date(a.createdAt || a.date || a.timestamp).getTime();
         const timeB = new Date(b.createdAt || b.date || b.timestamp).getTime();
         return timeB - timeA; // Sort by newest first
