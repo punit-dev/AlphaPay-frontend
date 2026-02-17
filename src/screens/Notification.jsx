@@ -45,12 +45,12 @@ const Notification = () => {
     <div className="h-screen w-full bg-[#0B0F1A]">
       <SecondaryNav title={"Notifications"} />
       <div className="h-[calc(100vh-65px)] w-full overflow-y-auto px-5 py-3 flex flex-col gap-5">
-        {groupedNotification.map((item, idx) => (
+        {groupedNotification.map((group, idx) => (
           <NotificationSecDiv
             key={idx}
-            label={item.formattedDate}
+            label={group.formattedDate}
             delay={idx / 60}>
-            {item.transactions.map((item, id) => (
+            {group.items.map((item, id) => (
               <NotificationDiv
                 key={id}
                 isRead={item.isRead}
