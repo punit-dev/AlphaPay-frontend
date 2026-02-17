@@ -11,6 +11,7 @@ import ProfileDiv from "../components/ProfileDiv";
 import { useNavigate } from "react-router";
 import ProfileView from "../components/ProfileView";
 import { appendNotification } from "../redux/notificationSlice";
+import {appendTransaction} from "../redux/transactionSlice"
 
 const Home = () => {
   const qrRef = useRef(null);
