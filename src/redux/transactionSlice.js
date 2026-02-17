@@ -76,6 +76,11 @@ const transactionSlice = createSlice({
     loading: false,
     error: null,
   },
+  reducers: {
+    appendTransaction: (state, action) => {
+      state.transactions.unshift(action.payload);
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchTransactions.pending, (state) => {
@@ -123,4 +128,5 @@ const transactionSlice = createSlice({
 });
 
 export { fetchTransactions, fetchTxn, userToUserTransfer };
+export const { appendTransaction } = transactionSlice.actions;
 export default transactionSlice.reducer;
