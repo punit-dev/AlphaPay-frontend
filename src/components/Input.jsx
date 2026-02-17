@@ -19,6 +19,7 @@ const Input = ({ type, label, placeholder, name }) => {
             placeholder={placeholder}
             onChange={(e) => setValue(e.target.value)}
             className="outline-none"
+            required
           />
           {isVisible ? (
             <IoEyeOff
@@ -53,6 +54,7 @@ const Input = ({ type, label, placeholder, name }) => {
         placeholder={placeholder}
         onChange={(e) => setValue(e.target.value)}
         className="bg-zinc-800 px-3 py-2.5 rounded-xl outline-none"
+        required
       />
     </div>
   );

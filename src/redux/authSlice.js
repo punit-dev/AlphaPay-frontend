@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import socket from "../socket";
 import axios from "axios";
 
 const loginUser = createAsyncThunk(
@@ -77,6 +78,7 @@ const logoutUser = createAsyncThunk("auth/logoutUser", async (_, thunkAPI) => {
     );
 
     if (res.status == 200) {
+      socket.disconnect();
       return window.location.replace("/authentication");
     }
   } catch (err) {
