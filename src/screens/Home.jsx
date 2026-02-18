@@ -196,7 +196,7 @@ const Home = () => {
                     name={
                       item.payer.userRef._id == user._id
                         ? item.payee.name
-                        : item.payer.userRef.fullname
+                        : item.payer.userRef?.fullname
                     }
                     src={
                       item.payer.userRef._id == user._id

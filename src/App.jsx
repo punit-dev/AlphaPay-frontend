@@ -20,6 +20,8 @@ import RequestMoney from "./screens/RequestMoney";
 import ErrorScreen from "./screens/ErrorScreen";
 import AfterRequestSent from "./screens/AfterRequestSent";
 import RequestHist from "./screens/RequestHist";
+import RequestDetail from "./screens/RequestDetail";
+import RequestCancel from "./screens/RequestCancel";
 
 const App = () => {
   const location = useLocation();
@@ -108,6 +110,14 @@ const App = () => {
         <Route
           path="/request-hist"
           element={<ProtectedRoute children={<RequestHist />} />}
+        />
+        <Route
+          path="/request-money/:reqId"
+          element={<ProtectedRoute children={<RequestDetail />} />}
+        />
+        <Route
+          path="/request-money/:reqId/canceled"
+          element={<ProtectedRoute children={<RequestCancel />} />}
         />
         <Route path="*" element={<Navigate to="/splash" replace />} />
       </Routes>

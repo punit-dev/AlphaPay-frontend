@@ -6,10 +6,11 @@ import Button from "../components/Button";
 import AfterConfirmScreen from "./AfterConfirmScreen";
 import { useDispatch, useSelector } from "react-redux";
 import { userToUserTransfer } from "../redux/transactionSlice";
+import { acceptReq } from "../redux/requestSlice";
 
 const ConfirmPay = () => {
   const location = useLocation();
-  const { user, method, amount, note } = location.state || {};
+  const { user, method, amount, note, reqId } = location.state || {};
   const [upiPin, setUpiPin] = useState("");
   const dispatch = useDispatch();
   const { loading, error, status } = useSelector((state) => state.transactions);
@@ -26,6 +27,9 @@ const ConfirmPay = () => {
         pin: upiPin,
       }),
     );
+    if (reqId) {
+      dispatch(acceptReq(reqId));
+    }
   };
 
   if (afterConfirm) {

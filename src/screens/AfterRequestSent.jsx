@@ -2,12 +2,14 @@ import ProfileView from "../components/ProfileView";
 import Button from "../components/Button";
 
 import { motion } from "motion/react";
-import { useLocation } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import SecondaryNav from "../components/SecondaryNav";
+import NoteDiv from "../components/NoteDiv";
 
 const AfterRequestSent = () => {
   const location = useLocation();
   const { amount, user, message, reqId } = location.state;
+  const navigate = useNavigate();
 
   return (
     <div className="bg-[#0B0F1A] h-screen w-full">
@@ -71,10 +73,8 @@ const AfterRequestSent = () => {
             type: "tween",
             duration: 0.7,
             delay: 0.4,
-          }}
-          className="bg-[#161B26] border-2 border-[#2C3546] py-2.5 px-5 rounded-3xl font-semibold font-urbanist flex flex-col gap-3 mt-5">
-          <h4 className="text-[#B0B8C3] text-sm ">Notes</h4>
-          <p className="text-base text-white">{message}</p>
+          }}>
+          <NoteDiv message={message} />
         </motion.div>
 
         <motion.div
@@ -88,7 +88,7 @@ const AfterRequestSent = () => {
           className="mt-8">
           <Button
             label={"View request details"}
-            onClick={(e) => console.log(reqId)}
+            onClick={(e) => navigate(`/request-money/${reqId}`)}
           />
         </motion.div>
       </div>

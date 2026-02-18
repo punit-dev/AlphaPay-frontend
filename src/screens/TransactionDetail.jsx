@@ -8,6 +8,7 @@ import SecondarySectionDiv from "../components/SecondarySectionDiv";
 import SuccessSVG from "/images/success.svg";
 import FailedSVG from "/images/failed.svg";
 import Loading from "./Loading";
+import NoteDiv from "../components/NoteDiv";
 
 const TransactionDetail = () => {
   const { txnId } = useParams();
@@ -88,14 +89,7 @@ const TransactionDetail = () => {
               </p>
             </div>
 
-            <div className="px-3 pb-4 pt-2 bg-[#161B26] rounded-xl flex flex-col gap-2 mt-3">
-              <p className="text-[#B0B8C3] font-urbanist text-sm font-semibold">
-                Note
-              </p>
-              <p className="text-white font-lexend text-base font-medium ">
-                {txn?.message}
-              </p>
-            </div>
+            <NoteDiv message={txn?.message} />
           </div>
         </SecondarySectionDiv>
       </div>

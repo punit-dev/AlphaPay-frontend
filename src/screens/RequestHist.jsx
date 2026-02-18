@@ -8,12 +8,14 @@ import ErrorScreen from "./ErrorScreen";
 import RequestDiv from "../components/RequestDiv";
 import { groupRequestsByStatus } from "../utils/requestUtils";
 import SecondarySectionDiv from "../components/SecondarySectionDiv";
+import { useNavigate } from "react-router";
 
 const RequestHist = () => {
   const [selected, setSelected] = useState("receive");
   const dispatch = useDispatch();
   const { requests, isLoading, err } = useSelector((state) => state.request);
   const { user } = useSelector((state) => state.auth);
+  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(fetchReq());
@@ -79,6 +81,9 @@ const RequestHist = () => {
                       : item.payerId.profilePic
                   }
                   status={item.status}
+                  onClick={() => {
+                    navigate(`/request-money/${item._id}`);
+                  }}
                 />
               ))}
             </SecondarySectionDiv>

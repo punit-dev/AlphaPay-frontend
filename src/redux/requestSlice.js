@@ -52,24 +52,19 @@ const fetchReqById = createAsyncThunk(
 
 const acceptReq = createAsyncThunk(
   "request/acceptReq",
-  async (reqData, thunkAPI) => {
+  async (reqId, thunkAPI) => {
     try {
       const res = await axios.put(
         `${import.meta.env.VITE_BASE_URL}/requests/accept`,
-        {
-          method: reqData.method,
-          pin: reqData.pin,
-          message: reqData?.message,
-        },
+        {},
         {
           withCredentials: true,
-          headers: `Bearer ${localStorage.getItem("token")}`,
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
           params: {
-            reqId: reqData.reqId,
+            reqId: reqId,
           },
         },
       );
-
       return res.data.request;
     } catch (err) {
       return thunkAPI.rejectWithValue(err.response?.message);

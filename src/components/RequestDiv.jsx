@@ -11,8 +11,8 @@ const RequestDiv = ({
 }) => {
   const statusObj = {
     pending: "#FFB100",
-    failed: "#FF4C4C",
-    success: "#00FFAE",
+    denied: "#FF4C4C",
+    approved: "#00FFAE",
   };
 
   return (
