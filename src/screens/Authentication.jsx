@@ -16,7 +16,6 @@ import { updateUpiPin } from "../redux/userSlice";
 
 const Authentication = () => {
   const [translate, setTranslate] = useState("120%");
-  // login = 240%, choose = 120%, signup = 0%, verify = -120%, upi = -240%
 
   const dispatch = useDispatch();
   const { otp, loading, error, user } = useSelector((state) => state.auth);

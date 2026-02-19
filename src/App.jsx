@@ -25,6 +25,7 @@ import RequestCancel from "./screens/RequestCancel";
 import { appendNotification } from "./redux/notificationSlice";
 import { appendTransaction } from "./redux/transactionSlice";
 import { appendRequest } from "./redux/requestSlice";
+import AddCard from "./screens/AddCard";
 
 const App = () => {
   const location = useLocation();
@@ -138,6 +139,10 @@ const App = () => {
         <Route
           path="/request-money/:reqId/canceled"
           element={<ProtectedRoute children={<RequestCancel />} />}
+        />
+        <Route
+          path="/add-card"
+          element={<ProtectedRoute children={<AddCard />} />}
         />
         <Route path="*" element={<Navigate to="/splash" replace />} />
       </Routes>

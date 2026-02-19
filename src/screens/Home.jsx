@@ -96,6 +96,9 @@ const Home = () => {
     {
       label: "Add a card",
       scr: "./icons/add_card.svg",
+      onClick: (e) => {
+        navigate("/add-card");
+      },
     },
     {
       label: "Request history",
