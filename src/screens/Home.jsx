@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import QRCodeStyling from "qr-code-styling";
 import { motion } from "motion/react";
-import socket from "../socket";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchTransactions } from "../redux/transactionSlice";
 import SectionDiv from "../components/SectionDiv";
@@ -10,8 +9,6 @@ import SecondarySectionDiv from "../components/SecondarySectionDiv";
 import ProfileDiv from "../components/ProfileDiv";
 import { useNavigate } from "react-router";
 import ProfileView from "../components/ProfileView";
-import { appendNotification } from "../redux/notificationSlice";
-import { appendTransaction } from "../redux/transactionSlice";
 import Loading from "./Loading";
 import ErrorScreen from "./ErrorScreen";
 

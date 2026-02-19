@@ -12,12 +12,15 @@ import {
 } from "../redux/authSlice";
 import { useNavigate } from "react-router";
 import Loading from "./Loading";
+import { updateUpiPin } from "../redux/userSlice";
 
 const Authentication = () => {
-  const [translate, setTranslate] = useState("60%");
+  const [translate, setTranslate] = useState("120%");
+  // login = 240%, choose = 120%, signup = 0%, verify = -120%, upi = -240%
 
   const dispatch = useDispatch();
   const { otp, loading, error, user } = useSelector((state) => state.auth);
+  const { loading: isLoading, error: err } = useSelector((state) => state.user);
 
   const navigate = useNavigate();
 
@@ -28,7 +31,11 @@ const Authentication = () => {
     const formData = new FormData(form);
 
     const allValues = Object.fromEntries(formData.entries());
-    dispatch(signupUser(allValues));
+    dispatch(signupUser(allValues)).then(({ payload }) => {
+      if (payload?.message == "User created successfully") {
+        setTranslate("-120%");
+      }
+    });
   };
   const loginFormHandler = (e) => {
     e.preventDefault();
@@ -53,12 +60,26 @@ const Authentication = () => {
     allValues = { ...allValues, email: user?.email };
     dispatch(verifyOtp(allValues)).then(({ payload }) => {
       if (payload?.message === "OTP Successfully verified") {
+        setTranslate("-240%");
+      }
+    });
+  };
+
+  const upiFormHandler = (e) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+
+    const formData = new FormData(form);
+    const upiPin = Object.fromEntries(formData.entries()).upiPin;
+
+    dispatch(updateUpiPin(upiPin)).then(({ payload }) => {
+      if (payload?.message == "UPI Pin is successfully updated") {
         navigate("/home");
       }
     });
   };
 
-  if (loading) return <Loading />;
+  if (loading || isLoading) return <Loading />;
   return (
     <div className="pt-10 flex flex-col px-7">
       <div className="h-50 w-50 mx-auto flex flex-col items-center justify-center gap-3">
@@ -101,9 +122,7 @@ const Authentication = () => {
             <Button label={"Log in"} />
             <p className="text-white font-lexend text-[15px]">
               Don't have any account?{" "}
-              <span
-                onClick={() => setTranslate("-60%")}
-                className="text-[#0aff]">
+              <span onClick={() => setTranslate("0%")} className="text-[#0aff]">
                 Sign up
               </span>
             </p>
@@ -115,7 +134,7 @@ const Authentication = () => {
             Your wallet, now in your pocket
           </p>
           <div className="mt-8">
-            <Button label={"Log in"} onClick={() => setTranslate("180%")} />
+            <Button label={"Log in"} onClick={() => setTranslate("240%")} />
             <div className="flex items-center w-full my-3 gap-1">
               <div className="w-full h-0.5 bg-zinc-700 rounded-full"></div>
               <p className="text-zinc-400 text-sm">OR</p>
@@ -126,7 +145,7 @@ const Authentication = () => {
               background="transparent"
               border={"2px solid #A27EFF"}
               color={"#a27eff"}
-              onClick={() => setTranslate("-60%")}
+              onClick={() => setTranslate("0%")}
             />
           </div>
         </AuthForm>
@@ -135,9 +154,10 @@ const Authentication = () => {
           <h2 className="text-white text-center text-2xl font-medium">
             Create an account
           </h2>
+          <p className="text-red-400 text-center">{error && error?.message}</p>
           <p className="text-white mt-3 font-lexend">
             Already have an account?{" "}
-            <span onClick={() => setTranslate("180%")} className="text-[#0aff]">
+            <span onClick={() => setTranslate("240%")} className="text-[#0aff]">
               Login
             </span>
           </p>
@@ -173,10 +193,7 @@ const Authentication = () => {
               type={"email"}
               name={"email"}
             />
-            <Button
-              label={"Create account"}
-              onClick={() => setTranslate("-180%")}
-            />
+            <Button label={"Create account"} />
           </div>
         </AuthForm>
         {/**Email verification form */}
@@ -184,11 +201,16 @@ const Authentication = () => {
           <h2 className="text-white text-center text-2xl font-medium">
             Verify your email
           </h2>
-          <p className="text-white">{otp}</p>
+          <p className="text-red-400 text-center">{error && error?.message}</p>
           <div className="flex gap-4 flex-col">
             <p className="text-white mt-8">
               please enter 6 digit code sent to {user?.email}
             </p>
+            <p className="text-white">
+              Demo Mode – Use this OTP to verify your account. You can resend
+              the OTP if required.
+            </p>
+            {otp && <p className="text-white">{otp}</p>}
             <Input type={"text"} name={"otp"} />
             <p
               className="text-right text-[#00AFFF] -mt-3 mr-2 text-lg font-lexend font-medium"
@@ -198,6 +220,21 @@ const Authentication = () => {
               Resend
             </p>
             <Button label={"Verify"} />
+          </div>
+        </AuthForm>
+
+        {/**Set UPI form */}
+        <AuthForm id={"ap-set-upi"} formHandler={upiFormHandler}>
+          <h2 className="text-white text-center text-2xl font-medium">
+            Set UPI Pin
+          </h2>
+          {err && <p className="text-red-500">{err}</p>}
+          <div className="flex gap-4 flex-col">
+            <p className="text-white mt-8 text-center">
+              Please set a 6-digit UPI PIN to complete your account setup.
+            </p>
+            <Input type={"password"} name={"upiPin"} />
+            <Button label={"Set UPI Pin"} />
           </div>
         </AuthForm>
       </motion.div>
