@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import SecondaryNav from "../components/SecondaryNav";
 import { useNavigate, useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchReqById, deniedReq } from "../redux/requestSlice";
+import { fetchReqById, deniedReq, deleteReq } from "../redux/requestSlice";
 import SecondarySectionDiv from "../components/SecondarySectionDiv";
 import SuccessSVG from "/images/success.svg";
 import FailedSVG from "/images/failed.svg";
@@ -13,6 +13,7 @@ import Button from "../components/Button";
 import NoteDiv from "../components/NoteDiv";
 import PaymentOption from "../components/PaymentOption";
 import { motion } from "motion/react";
+import ErrorScreen from "./ErrorScreen";
 
 const statusObj = {
   DENIED: { src: FailedSVG, label: "Denied", color: "#FF4C4C" },
@@ -42,7 +43,7 @@ const RequestDetail = () => {
   const { reqId } = useParams();
   const {
     request,
-    isLoading: loading,
+    isLoading: loading = true,
     err: error,
   } = useSelector((state) => state.request);
   const dispatch = useDispatch();
@@ -58,33 +59,46 @@ const RequestDetail = () => {
     }
   }, [reqId, dispatch]);
 
-  if (loading || !request) return <Loading />;
-  if (error) return <div>Error: {error}</div>;
+  if (loading) return <Loading />;
+  if (error) return <ErrorScreen>Error: {error}</ErrorScreen>;
+  if (!request)
+    return (
+      <div className="h-screen flex flex-col items-center justify-center bg-[#0B0F1A] text-white px-5 text-center">
+        <h2 className="text-2xl font-semibold mb-3">Request Not Found</h2>
+        <p className="text-[#B0B8C3] mb-6">
+          The payment request you are looking for does not exist or may have
+          been removed.
+        </p>
+        <Button label="Go Back" onClick={() => navigate(-1)} />
+      </div>
+    );
 
-  const currentStatus = statusObj[request.status] || statusObj.PENDING;
-  const reqData = new Date(request.createdAt);
+  const currentStatus = statusObj[request?.status] || statusObj.PENDING;
+  const reqDate = new Date(request?.createdAt);
 
-  const deleteReq = () => {
-    dispatch(deleteReq(reqId));
-    if (!loading && !error) {
+  const deleteRequest = async () => {
+    const resultAction = await dispatch(deleteReq(reqId));
+    if (deleteReq.fulfilled.match(resultAction)) {
       navigate(`/request-money/${reqId}/canceled`, {
         state: {
-          amount: request.amount,
-          toUser: request.payerId.fullname,
-          message: request.message,
+          amount: request?.amount,
+          toUser: request?.payerId.fullname,
+          message: request?.message,
+          title: "Request Deleted",
+          label: "Request has been deleted",
         },
       });
     }
   };
 
-  const deniedReq = () => {
-    dispatch(deniedReq(reqId));
-    if (!loading && !error) {
+  const deniedRequest = async () => {
+    const resultAction = await dispatch(deniedReq(reqId));
+    if (deniedReq.fulfilled.match(resultAction)) {
       navigate(`/request-money/${reqId}/canceled`, {
         state: {
-          amount: request.amount,
-          toUser: request.payerId.fullname,
-          message: request.message,
+          amount: request?.amount,
+          toUser: request?.senderId.fullname,
+          message: request?.message,
         },
       });
     }
@@ -96,7 +110,7 @@ const RequestDetail = () => {
       <div className="px-10 mt-3">
         <ProfileView
           user={
-            request.senderId._id == user._id
+            request?.senderId?._id == user._id
               ? request.payerId
               : request.senderId
           }
@@ -143,27 +157,33 @@ const RequestDetail = () => {
                 Requested on
               </p>
               <p className="text-white font-urbanist text-xl font-bold -mt-4">
-                {reqData.getDate() +
+                {reqDate.getDate() +
                   " " +
-                  month[reqData.getMonth()] +
+                  month[reqDate.getMonth()] +
                   ", " +
-                  reqData.toLocaleTimeString().split(":").slice(0, 2).join(":")}
+                  reqDate.toLocaleTimeString().split(":").slice(0, 2).join(":")}
               </p>
             </div>
           </div>
         </SecondarySectionDiv>
       </div>
 
-      {!["approved", "denied"].includes(request?.status.toLowerCase()) && (
+      {!["approved", "denied"].includes(request?.status?.toLowerCase()) && (
         <div className="px-5 mt-10 flex gap-5">
           <Button
-            label={request.senderId._id == user._id ? "Delete" : "Cancel"}
+            label={request?.senderId?._id == user._id ? "Delete" : "Cancel"}
             background="transparent"
             border={"2px solid #FF4C4C"}
             color={"#FF4C4C"}
-            onClick={request.senderId._id == user._id ? deleteReq : deniedReq}
+            onClick={() => {
+              if (request?.senderId?._id == user._id) {
+                deleteRequest();
+              } else {
+                deniedRequest();
+              }
+            }}
           />
-          {request.payerId._id == user._id && (
+          {request?.payerId?._id == user._id && (
             <Button
               label={"Pay now"}
               onClick={() => {
@@ -177,64 +197,66 @@ const RequestDetail = () => {
           )}
         </div>
       )}
-      <motion.div
-        initial={{ opacity: 0, display: "none" }}
-        animate={{
-          opacity: showOptions ? 1 : 0,
-          display: showOptions ? "flex" : "none",
-        }}
-        className="absolute bottom-0 left-0 right-0 h-screen bg-[#0B0F1A]/50 backdrop-blur-sm flex items-center justify-center px-5">
-        <div className="w-full flex items-center justify-center h-60 flex-col">
-          <motion.div
-            initial={{ y: 35 }}
-            animate={{ y: -40 }}
-            className="border-4 rounded-tl-4xl border-t-[#00AFFF] border-l-[#00aeff] border-r-transparent border-b-transparent w-full h-20"
-          />
-          <motion.div
-            initial={{ height: 0 }}
-            animate={{ height: "100%" }}
-            className="h-full w-full flex flex-col gap-5 relative px-4 overflow-hidden justify-center">
-            {options.map((option) => (
-              <PaymentOption
-                key={option}
-                label={option}
-                value={option}
-                selected={selected === option}
-                onChange={setSelected}
-                onClick={() => {
-                  setShowOptions(false);
-                  if (option === "Wallet") {
-                    navigate("/confirm-pay", {
-                      state: {
-                        user: request?.senderId,
-                        amount: request?.amount,
-                        method: "Wallet",
-                        note: request?.message,
-                        reqId,
-                      },
-                    });
-                  } else if (option === "Card") {
-                    navigate("/confirm-pay", {
-                      state: {
-                        user: request?.senderId,
-                        amount: request?.amount,
-                        method: "Card",
-                        note: request?.message,
-                        reqId,
-                      },
-                    });
-                  }
-                }}
-              />
-            ))}
-          </motion.div>
-          <motion.div
-            initial={{ y: -35 }}
-            animate={{ y: 40 }}
-            className="border-4 rounded-br-4xl border-b-[#00AFFF] border-r-[#00aeff] border-t-transparent border-l-transparent w-full h-20"
-          />
-        </div>
-      </motion.div>
+      {showOptions && (
+        <motion.div
+          initial={{ opacity: 0, display: "none" }}
+          animate={{
+            opacity: showOptions ? 1 : 0,
+            display: showOptions ? "flex" : "none",
+          }}
+          className="absolute bottom-0 left-0 right-0 h-screen bg-[#0B0F1A]/50 backdrop-blur-sm flex items-center justify-center px-5">
+          <div className="w-full flex items-center justify-center h-60 flex-col">
+            <motion.div
+              initial={{ y: 35 }}
+              animate={{ y: -40 }}
+              className="border-4 rounded-tl-4xl border-t-[#00AFFF] border-l-[#00aeff] border-r-transparent border-b-transparent w-full h-20"
+            />
+            <motion.div
+              initial={{ height: 0 }}
+              animate={{ height: "100%" }}
+              className="h-full w-full flex flex-col gap-5 relative px-4 overflow-hidden justify-center">
+              {options.map((option) => (
+                <PaymentOption
+                  key={option}
+                  label={option}
+                  value={option}
+                  selected={selected === option}
+                  onChange={setSelected}
+                  onClick={() => {
+                    setShowOptions(false);
+                    if (option === "Wallet") {
+                      navigate("/confirm-pay", {
+                        state: {
+                          user: request?.senderId,
+                          amount: request?.amount,
+                          method: "Wallet",
+                          note: request?.message,
+                          reqId,
+                        },
+                      });
+                    } else if (option === "Card") {
+                      navigate("/confirm-pay", {
+                        state: {
+                          user: request?.senderId,
+                          amount: request?.amount,
+                          method: "Card",
+                          note: request?.message,
+                          reqId,
+                        },
+                      });
+                    }
+                  }}
+                />
+              ))}
+            </motion.div>
+            <motion.div
+              initial={{ y: -35 }}
+              animate={{ y: 40 }}
+              className="border-4 rounded-br-4xl border-b-[#00AFFF] border-r-[#00aeff] border-t-transparent border-l-transparent w-full h-20"
+            />
+          </div>
+        </motion.div>
+      )}
     </div>
   );
 };

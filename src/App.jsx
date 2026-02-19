@@ -12,7 +12,7 @@ import PhonePay from "./screens/PhonePay";
 import UpiPay from "./screens/UpiPay";
 import ScanQR from "./screens/ScanQR";
 import Profile from "./screens/Profile";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import socket from "./socket";
 import Notification from "./screens/Notification";
@@ -22,12 +22,16 @@ import AfterRequestSent from "./screens/AfterRequestSent";
 import RequestHist from "./screens/RequestHist";
 import RequestDetail from "./screens/RequestDetail";
 import RequestCancel from "./screens/RequestCancel";
+import { appendNotification } from "./redux/notificationSlice";
+import { appendTransaction } from "./redux/transactionSlice";
+import { appendRequest } from "./redux/requestSlice";
 
 const App = () => {
   const location = useLocation();
   const [isTooWide, setIsTooWide] = useState(window.innerWidth > 425);
 
   const { user } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const handleResize = () => {
@@ -49,6 +53,22 @@ const App = () => {
       socket.off("connect");
     };
   }, [user]);
+
+  useEffect(() => {
+    socket.on("tran", (data) => {
+      dispatch(appendNotification(data));
+      dispatch(appendTransaction(data.data.transaction));
+    });
+    socket.on("request", (data) => {
+      dispatch(appendNotification(data));
+      dispatch(appendRequest(data.data.request));
+    });
+
+    return () => {
+      socket.off("tran");
+      socket.off("request");
+    };
+  }, []);
 
   if (isTooWide) {
     return (

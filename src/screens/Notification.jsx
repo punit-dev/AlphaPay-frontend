@@ -38,7 +38,13 @@ const Notification = () => {
         dispatch(markAsRead(notifyId));
       },
     },
-    request: { src: "./icons/request_money.svg" },
+    request: {
+      src: "./icons/request_money.svg",
+      onClick: (reqId, notifyId) => {
+        navigate(`/request-money/${reqId}`);
+        dispatch(markAsRead(notifyId));
+      },
+    },
   };
 
   return (
@@ -57,12 +63,19 @@ const Notification = () => {
                 message={item.message}
                 heading={toSentenceCase(item.type)}
                 src={notifyAccess[item.type].src}
-                onClick={(e) =>
-                  notifyAccess[item.type]?.onClick(
-                    item.data.transactionId,
-                    item._id,
-                  )
-                }
+                onClick={(e) => {
+                  if (item.type == "transaction") {
+                    notifyAccess[item.type]?.onClick(
+                      item.data.transactionId,
+                      item._id,
+                    );
+                  } else {
+                    notifyAccess[item.type]?.onClick(
+                      item.data?.request?._id,
+                      item._id,
+                    );
+                  }
+                }}
               />
             ))}
           </NotificationSecDiv>

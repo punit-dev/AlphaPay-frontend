@@ -12,6 +12,8 @@ import { useNavigate } from "react-router";
 import ProfileView from "../components/ProfileView";
 import { appendNotification } from "../redux/notificationSlice";
 import { appendTransaction } from "../redux/transactionSlice";
+import Loading from "./Loading";
+import ErrorScreen from "./ErrorScreen";
 
 const Home = () => {
   const qrRef = useRef(null);
@@ -55,21 +57,6 @@ const Home = () => {
       qrCode.append(qrRef.current);
     }
   });
-
-  useEffect(() => {
-    socket.on("tran", (data) => {
-      dispatch(appendNotification(data));
-      dispatch(appendTransaction(data.data.transaction));
-    });
-    socket.on("request", (data) => {
-      dispatch(appendNotification(data));
-    });
-
-    return () => {
-      socket.off("tran");
-      socket.off("request");
-    };
-  }, []);
 
   const navigate = useNavigate();
 
@@ -121,6 +108,14 @@ const Home = () => {
       },
     },
   ];
+
+  if (loading) {
+    return <Loading />;
+  }
+
+  if (error) {
+    return <ErrorScreen error={error} />;
+  }
 
   return (
     <div className="w-full h-screen relative flex items-center flex-col">

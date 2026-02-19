@@ -2,7 +2,7 @@ import React, { useEffect, useState, useMemo } from "react";
 import SecondaryNav from "../components/SecondaryNav";
 import { motion } from "motion/react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchReq } from "../redux/requestSlice";
+import { clearRequest, fetchReq } from "../redux/requestSlice";
 import Loading from "./Loading";
 import ErrorScreen from "./ErrorScreen";
 import RequestDiv from "../components/RequestDiv";
@@ -19,6 +19,7 @@ const RequestHist = () => {
 
   useEffect(() => {
     dispatch(fetchReq());
+    dispatch(clearRequest());
   }, [dispatch]);
 
   const groupedRequests = useMemo(() => {

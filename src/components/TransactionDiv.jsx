@@ -13,6 +13,8 @@ const TransactionDiv = ({
     pending: "#FFB100",
     failed: "#FF4C4C",
     success: "#00FFAE",
+    approved: "#00FFAE",
+    denied: "#FF4C4C",
   };
 
   return (

@@ -9,12 +9,12 @@ const RequestCancel = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const { amount, toUser, message } = location.state;
+  const { amount, toUser, message, label, title } = location.state;
 
   return (
     <div className="h-screen w-full bg-[#0B0F1A] flex flex-col items-center">
       <SecondaryNav
-        title={"Request Canceled"}
+        title={title || "Request Canceled"}
         onClick={() => navigate("/home")}
       />
       <div className="mt-10 px-5">
@@ -22,7 +22,7 @@ const RequestCancel = () => {
           <RxCross2 className="mx-auto text-black w-30 h-30" />
         </div>
         <p className="text-2xl text-[#FF4C4C] font-semibold font-urbanist text-center mt-3">
-          Request has been cancelled
+          {label || "Request has been cancelled"}
         </p>
       </div>
       <div className="px-10 w-full mt-8">

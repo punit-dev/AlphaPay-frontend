@@ -127,6 +127,9 @@ const requestSlice = createSlice({
     appendRequest: (state, action) => {
       state.requests.unshift(action.payload);
     },
+    clearRequest: (state) => {
+      state.request = null;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -203,6 +206,6 @@ const requestSlice = createSlice({
   },
 });
 
-export const { appendRequest } = requestSlice.actions;
+export const { appendRequest, clearRequest } = requestSlice.actions;
 export default requestSlice.reducer;
 export { makeReq, fetchReq, fetchReqById, acceptReq, deniedReq, deleteReq };

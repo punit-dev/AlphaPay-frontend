@@ -8,7 +8,7 @@ import ProfileForSend from "../components/ProfileForSend";
 import SecondarySectionDiv from "../components/SecondarySectionDiv";
 import TransactionDiv from "../components/TransactionDiv";
 import { groupTransactionsByDate } from "../utils/transactionUtils";
-import { fetchReq, makeReq } from "../redux/requestSlice";
+import { clearRequest, fetchReq, makeReq } from "../redux/requestSlice";
 import Loading from "./Loading";
 import ErrorScreen from "./ErrorScreen";
 import { useNavigate } from "react-router";
@@ -32,11 +32,23 @@ const RequestMoney = () => {
 
   const handleForm = async (e) => {
     e.preventDefault();
+
+    dispatch(clearRequest());
+
     const data = { payerId: userData.id, amount, message: note };
-    dispatch(makeReq(data));
-    if (!isLoading && !err) {
+
+    const resultAction = await dispatch(makeReq(data));
+
+    if (makeReq.fulfilled.match(resultAction)) {
+      const createdRequest = resultAction.payload;
+
       navigate("/request-money/done", {
-        state: { amount, user: userData, message: note, reqId: request?._id },
+        state: {
+          amount,
+          user: userData,
+          message: note,
+          reqId: createdRequest._id,
+        },
         replace: true,
       });
     }
@@ -170,7 +182,7 @@ const RequestMoney = () => {
                       : req.senderId?.profilePic
                   }
                   status={req?.status || "pending"} // Provide a fallback
-                  onClick={() => console.log(req._id)}
+                  onClick={() => navigate(`/request-money/${req?._id}`)}
                 />
               ))}
             </SecondarySectionDiv>
