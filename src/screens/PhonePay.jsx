@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import SecondaryNav from "../components/SecondaryNav";
 import { motion } from "motion/react";
 import { useSelector } from "react-redux";
@@ -14,6 +14,12 @@ const PhonePay = () => {
 
   const { user } = useSelector((state) => state.auth);
   const navigate = useNavigate();
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    inputRef.current.focus();
+    setSelected(true);
+  }, []);
 
   return (
     <div className="bg-[#0B0F1A] h-screen w-full">
@@ -25,6 +31,7 @@ const PhonePay = () => {
             animate={{ boxShadow: selected ? "0 0 20px #00AFFF89" : "none" }}
             className="text-white font-urbanist text-xl font-medium flex items-center justify-between px-3 py-4 border-2 border-[#00AFFF] rounded-2xl">
             <input
+              ref={inputRef}
               placeholder="Enter phone number"
               className="bg-transparent w-full outline-none"
               type="number"

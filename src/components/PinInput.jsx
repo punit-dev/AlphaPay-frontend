@@ -1,8 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { motion } from "motion/react";
 
 const PinInput = ({ value, setValue }) => {
   const [isSelected, setIsSelected] = useState(false);
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    inputRef.current.focus();
+    setIsSelected(true);
+  }, []);
 
   return (
     <div className="relative w-4/5">
@@ -26,6 +32,7 @@ const PinInput = ({ value, setValue }) => {
       </motion.div>
 
       <input
+        ref={inputRef}
         id="pin"
         type="text"
         inputMode="numeric"
