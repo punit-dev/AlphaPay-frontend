@@ -13,7 +13,7 @@ const loginUser = createAsyncThunk(
       );
       return res.data;
     } catch (err) {
-      return thunkAPI.rejectWithValue(err.response.data);
+      return thunkAPI.rejectWithValue(err?.response?.data?.message);
     }
   },
 );
@@ -29,7 +29,7 @@ const signupUser = createAsyncThunk(
       );
       return res.data;
     } catch (err) {
-      return thunkAPI.rejectWithValue(err.response.data);
+      return thunkAPI.rejectWithValue(err?.response?.data?.message);
     }
   },
 );
@@ -44,7 +44,7 @@ const verifyOtp = createAsyncThunk(
       );
       return res.data;
     } catch (err) {
-      return thunkAPI.rejectWithValue(err.response.data);
+      return thunkAPI.rejectWithValue(err?.response?.data?.message);
     }
   },
 );
@@ -59,7 +59,7 @@ const resendOtp = createAsyncThunk(
       );
       return res.data;
     } catch (err) {
-      return thunkAPI.rejectWithValue(err.response.data);
+      return thunkAPI.rejectWithValue(err?.response?.data?.message);
     }
   },
 );
@@ -82,7 +82,7 @@ const logoutUser = createAsyncThunk("auth/logoutUser", async (_, thunkAPI) => {
       return window.location.replace("/authentication");
     }
   } catch (err) {
-    return thunkAPI.rejectWithValue(err.response.data);
+    return thunkAPI.rejectWithValue(err?.response?.data?.message);
   }
 });
 

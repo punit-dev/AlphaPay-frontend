@@ -17,7 +17,9 @@ const fetchNotification = createAsyncThunk(
 
       return res.data?.notifications;
     } catch (err) {
-      return thunkAPI.rejectWithValue(err.response?.message || err.message);
+      return thunkAPI.rejectWithValue(
+        err?.response?.data?.message || err.message,
+      );
     }
   },
 );
@@ -37,7 +39,9 @@ const markAsRead = createAsyncThunk(
         },
       );
     } catch (err) {
-      return thunkAPI.rejectWithValue(err.response?.message || err.message);
+      return thunkAPI.rejectWithValue(
+        err?.response?.data?.message || err.message,
+      );
     }
   },
 );
@@ -54,7 +58,9 @@ const deleteNotification = createAsyncThunk(
         },
       );
     } catch (err) {
-      return thunkAPI.rejectWithValue(err.response?.message || err.message);
+      return thunkAPI.rejectWithValue(
+        err?.response?.data?.message || err.message,
+      );
     }
   },
 );

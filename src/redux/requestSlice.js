@@ -14,7 +14,7 @@ const makeReq = createAsyncThunk("request/makeReq", async (data, thunkAPI) => {
 
     return res.data.request;
   } catch (err) {
-    return thunkAPI.rejectWithValue(err.response?.message);
+    return thunkAPI.rejectWithValue(err?.response?.data?.message);
   }
 });
 
@@ -27,7 +27,7 @@ const fetchReq = createAsyncThunk("request/fetchReq", async (_, thunkAPI) => {
 
     return res.data.requests;
   } catch (err) {
-    return thunkAPI.rejectWithValue(err.response?.message);
+    return thunkAPI.rejectWithValue(err?.response?.data?.message);
   }
 });
 
@@ -45,7 +45,7 @@ const fetchReqById = createAsyncThunk(
 
       return res.data.request;
     } catch (err) {
-      return thunkAPI.rejectWithValue(err.response?.message);
+      return thunkAPI.rejectWithValue(err?.response?.data?.message);
     }
   },
 );
@@ -67,7 +67,7 @@ const acceptReq = createAsyncThunk(
       );
       return res.data.request;
     } catch (err) {
-      return thunkAPI.rejectWithValue(err.response?.message);
+      return thunkAPI.rejectWithValue(err?.response?.data?.message);
     }
   },
 );
@@ -90,7 +90,7 @@ const deniedReq = createAsyncThunk(
 
       return res.data.request;
     } catch (err) {
-      return thunkAPI.rejectWithValue(err.response?.message);
+      return thunkAPI.rejectWithValue(err?.response?.data?.message);
     }
   },
 );

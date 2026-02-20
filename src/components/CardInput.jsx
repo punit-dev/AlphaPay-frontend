@@ -24,6 +24,28 @@ const CardInput = ({
     }
   };
 
+  if (type == "option") {
+    return (
+      <div className="relative w-full">
+        <select
+          name="type"
+          className="w-full px-2 bg-[#161B26] border-2 border-[#1F2633] text-xl py-3 rounded-lg outline-none text-[#B0B8C3] appearance-none"
+          onChange={onChangeHandler}
+          required>
+          <option value="" disabled selected>
+            Type
+          </option>
+          <option value="debit">Debit</option>
+          <option value="credit">Credit</option>
+        </select>
+
+        <div className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[#B0B8C3]">
+          ▼
+        </div>
+      </div>
+    );
+  }
+
   return (
     <input
       autoComplete="off"

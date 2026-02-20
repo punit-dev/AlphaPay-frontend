@@ -4,6 +4,7 @@ import transactionReducer from "./transactionSlice";
 import notificationReducer from "./notificationSlice";
 import requestReducer from "./requestSlice";
 import userReducer from "./userSlice";
+import cardReducer from "./cardSlice";
 
 export const store = configureStore({
   reducer: {
@@ -12,5 +13,6 @@ export const store = configureStore({
     notification: notificationReducer,
     request: requestReducer,
     user: userReducer,
+    card: cardReducer,
   },
 });

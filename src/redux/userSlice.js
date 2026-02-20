@@ -17,7 +17,9 @@ const updateUpiPin = createAsyncThunk(
       );
       return res.data;
     } catch (err) {
-      return thunkAPI.rejectWithValue(err.response?.message || err.message);
+      return thunkAPI.rejectWithValue(
+        err?.response?.data?.message || err.message,
+      );
     }
   },
 );

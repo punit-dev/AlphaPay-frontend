@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Input from "../components/Input";
 import AuthForm from "../components/AuthForm";
 import Button from "../components/Button";
@@ -16,6 +16,7 @@ import { updateUpiPin } from "../redux/userSlice";
 
 const Authentication = () => {
   const [translate, setTranslate] = useState("120%");
+  const [isDisable, setIsDisable] = useState(true);
 
   const dispatch = useDispatch();
   const { otp, loading, error, user } = useSelector((state) => state.auth);
@@ -31,6 +32,7 @@ const Authentication = () => {
 
     const allValues = Object.fromEntries(formData.entries());
     dispatch(signupUser(allValues)).then(({ payload }) => {
+      setIsDisable(true);
       if (payload?.message == "User created successfully") {
         setTranslate("-120%");
       }
@@ -44,6 +46,7 @@ const Authentication = () => {
 
     const allValues = Object.fromEntries(formData.entries());
     dispatch(loginUser(allValues)).then(({ payload }) => {
+      setIsDisable(true);
       if (payload?.token) {
         navigate("/home");
       }
@@ -58,6 +61,7 @@ const Authentication = () => {
     let allValues = Object.fromEntries(formData.entries());
     allValues = { ...allValues, email: user?.email };
     dispatch(verifyOtp(allValues)).then(({ payload }) => {
+      setIsDisable(true);
       if (payload?.message === "OTP Successfully verified") {
         setTranslate("-240%");
       }
@@ -72,6 +76,7 @@ const Authentication = () => {
     const upiPin = Object.fromEntries(formData.entries()).upiPin;
 
     dispatch(updateUpiPin(upiPin)).then(({ payload }) => {
+      setIsDisable(true);
       if (payload?.message == "UPI Pin is successfully updated") {
         navigate("/home");
       }
@@ -95,7 +100,10 @@ const Authentication = () => {
         }}
         className="mt-10 flex items-center justify-center h-100 gap-15 ">
         {/**login form */}
-        <AuthForm id={"ap-login"} formHandler={loginFormHandler}>
+        <AuthForm
+          id={"ap-login"}
+          formHandler={loginFormHandler}
+          setIsDisable={setIsDisable}>
           <h2 className="text-white text-center text-3xl font-medium">
             Log in
           </h2>
@@ -106,6 +114,7 @@ const Authentication = () => {
               placeholder={"john@example.com"}
               type={"email"}
               name={"email"}
+              minLen={12}
             />
             <div>
               <Input
@@ -113,12 +122,13 @@ const Authentication = () => {
                 placeholder={"password"}
                 type={"password"}
                 name={"password"}
+                minLen={8}
               />
               <p className="text-[#00afff] text-md font-medium font-lexend">
                 Forgot password?
               </p>
             </div>
-            <Button label={"Log in"} />
+            <Button label={"Log in"} disabled={isDisable} />
             <p className="text-white font-lexend text-[15px]">
               Don't have any account?{" "}
               <span onClick={() => setTranslate("0%")} className="text-[#0aff]">
@@ -127,6 +137,7 @@ const Authentication = () => {
             </p>
           </div>
         </AuthForm>
+
         {/**Choose box */}
         <AuthForm id={"ap-choose"}>
           <p className="text-white text-center text-lg mt-5">
@@ -148,8 +159,12 @@ const Authentication = () => {
             />
           </div>
         </AuthForm>
+
         {/**Signup form */}
-        <AuthForm id={"ap-signup"} formHandler={signupFormHandler}>
+        <AuthForm
+          id={"ap-signup"}
+          formHandler={signupFormHandler}
+          setIsDisable={setIsDisable}>
           <h2 className="text-white text-center text-2xl font-medium">
             Create an account
           </h2>
@@ -166,12 +181,15 @@ const Authentication = () => {
               placeholder={"John Smith"}
               type={"text"}
               name={"fullname"}
+              minLen={6}
             />
             <Input
               label={"Phone Number"}
               placeholder={"123456789"}
               type={"text"}
               name={"phoneNumber"}
+              minLen={10}
+              maxLen={10}
             />
             <Input label={"Date of birth"} type={"date"} name={"dateOfBirth"} />
             <Input
@@ -179,24 +197,31 @@ const Authentication = () => {
               placeholder={"john123"}
               type={"text"}
               name={"username"}
+              minLen={5}
             />
             <Input
               label={"Password"}
               placeholder={"Password"}
               type={"password"}
               name={"password"}
+              minLen={8}
             />
             <Input
               label={"Email address"}
               placeholder={"john@example.com"}
               type={"email"}
               name={"email"}
+              minLen={12}
             />
-            <Button label={"Create account"} />
+            <Button label={"Create account"} disabled={isDisable} />
           </div>
         </AuthForm>
+
         {/**Email verification form */}
-        <AuthForm id={"ap-verification"} formHandler={verifyFormHandler}>
+        <AuthForm
+          id={"ap-verification"}
+          formHandler={verifyFormHandler}
+          setIsDisable={setIsDisable}>
           <h2 className="text-white text-center text-2xl font-medium">
             Verify your email
           </h2>
@@ -210,7 +235,7 @@ const Authentication = () => {
               the OTP if required.
             </p>
             {otp && <p className="text-white">{otp}</p>}
-            <Input type={"text"} name={"otp"} />
+            <Input type={"text"} name={"otp"} minLen={6} maxLen={6} />
             <p
               className="text-right text-[#00AFFF] -mt-3 mr-2 text-lg font-lexend font-medium"
               onClick={(e) => {
@@ -218,12 +243,15 @@ const Authentication = () => {
               }}>
               Resend
             </p>
-            <Button label={"Verify"} />
+            <Button label={"Verify"} disabled={isDisable} />
           </div>
         </AuthForm>
 
         {/**Set UPI form */}
-        <AuthForm id={"ap-set-upi"} formHandler={upiFormHandler}>
+        <AuthForm
+          id={"ap-set-upi"}
+          formHandler={upiFormHandler}
+          setIsDisable={setIsDisable}>
           <h2 className="text-white text-center text-2xl font-medium">
             Set UPI Pin
           </h2>
@@ -232,8 +260,8 @@ const Authentication = () => {
             <p className="text-white mt-8 text-center">
               Please set a 6-digit UPI PIN to complete your account setup.
             </p>
-            <Input type={"password"} name={"upiPin"} />
-            <Button label={"Set UPI Pin"} />
+            <Input type={"password"} name={"upiPin"} minLen={6} maxLen={6} />
+            <Button label={"Set UPI Pin"} disabled={isDisable} />
           </div>
         </AuthForm>
       </motion.div>

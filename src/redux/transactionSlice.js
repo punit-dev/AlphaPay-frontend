@@ -15,7 +15,7 @@ const fetchTransactions = createAsyncThunk(
       return res.data;
     } catch (err) {
       return thunkAPI.rejectWithValue(
-        err.response?.data?.message || err.message,
+        err?.response?.data?.message || err.message,
       );
     }
   },
@@ -38,7 +38,7 @@ const fetchTxn = createAsyncThunk(
     } catch (err) {
       if (axios.isCancel(err)) return;
       return thunkAPI.rejectWithValue(
-        err.response?.data?.message || "Something went wrong",
+        err?.response?.data?.message || "Something went wrong",
       );
     }
   },
@@ -59,7 +59,7 @@ const userToUserTransfer = createAsyncThunk(
       return res.data.transaction;
     } catch (err) {
       return thunkAPI.rejectWithValue(
-        err.response?.data?.message || err.message,
+        err?.response?.data?.message || err.message,
       );
     }
   },
