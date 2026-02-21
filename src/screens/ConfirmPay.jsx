@@ -10,7 +10,7 @@ import { acceptReq } from "../redux/requestSlice";
 
 const ConfirmPay = () => {
   const location = useLocation();
-  const { user, method, amount, note, reqId } = location.state || {};
+  const { user, method, amount, note, reqId, cardId } = location.state || {};
   const [upiPin, setUpiPin] = useState("");
   const dispatch = useDispatch();
   const { loading, error, status } = useSelector((state) => state.transactions);
@@ -25,6 +25,7 @@ const ConfirmPay = () => {
         message: note,
         method: method.toLowerCase(),
         pin: upiPin,
+        cardID: cardId,
       }),
     );
     if (reqId) {

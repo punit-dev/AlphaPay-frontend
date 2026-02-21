@@ -38,7 +38,7 @@ const AddCard = () => {
 
   if (loading) return <Loading />;
 
-  if (error) {
+  if (error && cards.length != 0) {
     return <ErrorScreen error={error} onRetry={() => location.reload()} />;
   }
   return (
@@ -50,30 +50,34 @@ const AddCard = () => {
           Your cards
         </h2>
 
-        <div className="px-8 flex justify-center">
-          <Swiper
-            effect="cards"
-            grabCursor={true}
-            modules={[EffectCards]}
-            loop={cards.length > 3}
-            className="w-[350px]">
-            {cards.map((card, idx) => (
-              <SwiperSlide key={idx} className="px-4">
-                <UserCard
-                  holderName={card.cardHolder}
-                  cardNumber={card.cardNumber}
-                  cvv={card.CVV}
-                  expiry={card.expiryDate}
-                  cardType={toSentenceCase(card.type)}
-                  onClick={(e) => {
-                    setIsDeleting(true);
-                    setCardId(card?._id);
-                  }}
-                />
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        </div>
+        {cards.length != 0 ? (
+          <div className="px-3 flex justify-center">
+            <Swiper
+              effect="cards"
+              grabCursor={true}
+              modules={[EffectCards]}
+              loop={cards.length > 3}
+              className="w-87.5">
+              {cards.map((card, idx) => (
+                <SwiperSlide key={idx} className="px-4">
+                  <UserCard
+                    holderName={card.cardHolder}
+                    cardNumber={card.cardNumber}
+                    cvv={card.CVV}
+                    expiry={card.expiryDate}
+                    cardType={toSentenceCase(card.type)}
+                    onClick={(e) => {
+                      setIsDeleting(true);
+                      setCardId(card?._id);
+                    }}
+                  />
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </div>
+        ) : (
+          <p className="text-lg text-center text-[#B0B8C3]">{error}</p>
+        )}
       </div>
 
       <div className="mt-12 px-5">
@@ -170,6 +174,9 @@ const AddCard = () => {
                   dispatch(deleteCard(cardId));
                   setCardId(null);
                   setIsDeleting(false);
+                  setTimeout(() => {
+                    location.reload();
+                  }, 1000);
                 }}
               />
             </div>
