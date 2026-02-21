@@ -21,10 +21,7 @@ import AfterRequestSent from "./screens/AfterRequestSent";
 import RequestHist from "./screens/RequestHist";
 import RequestDetail from "./screens/RequestDetail";
 import RequestCancel from "./screens/RequestCancel";
-import {
-  appendNotification,
-  fetchNotification,
-} from "./redux/notificationSlice";
+import { appendNotification } from "./redux/notificationSlice";
 import { appendTransaction } from "./redux/transactionSlice";
 import { appendRequest } from "./redux/requestSlice";
 import AddCard from "./screens/AddCard";
@@ -50,7 +47,6 @@ const App = () => {
   useEffect(() => {
     if (!isFetched) {
       dispatch(fetchProfile());
-      dispatch(fetchNotification());
       setIsFetched(true);
     }
   }, [dispatch]);
