@@ -1,7 +1,6 @@
-import { Navigate, Route, Routes, useLocation } from "react-router";
+import { Navigate, Route, Routes } from "react-router";
 import Authentication from "./screens/Authentication";
 import Home from "./screens/Home";
-import Nav from "./components/Nav";
 import ProtectedRoute from "./protectedRoute/ProtectedRoute";
 import BalanceHist from "./screens/BalanceHist";
 import TransactionDetail from "./screens/TransactionDetail";
@@ -28,7 +27,6 @@ import { appendRequest } from "./redux/requestSlice";
 import AddCard from "./screens/AddCard";
 
 const App = () => {
-  const location = useLocation();
   const [isTooWide, setIsTooWide] = useState(window.innerWidth > 425);
 
   const { user } = useSelector((state) => state.auth);
@@ -79,7 +77,6 @@ const App = () => {
 
   return (
     <div className="bg-linear-140 from-[#342952] via-[#0B0F1A] via-40% to-[#00AFFF] to-300% w-full h-screen overflow-hidden">
-      {location.pathname == "/home" && <Nav />}
       <Routes>
         <Route path="/" element={<SplashScreen />} />
         <Route path="/authentication" element={<Authentication />} />

@@ -11,6 +11,7 @@ import { useNavigate } from "react-router";
 import ProfileView from "../components/ProfileView";
 import Loading from "./Loading";
 import ErrorScreen from "./ErrorScreen";
+import Nav from "../components/Nav";
 
 const Home = () => {
   const qrRef = useRef(null);
@@ -109,16 +110,13 @@ const Home = () => {
     },
   ];
 
-  if (loading) {
-    return <Loading />;
-  }
-
   if (error) {
     return <ErrorScreen error={error} />;
   }
 
   return (
-    <div className="w-full h-screen relative flex items-center flex-col">
+    <div className="w-full h-screen relative flex  flex-col">
+      <Nav />
       <div className="py-10 flex flex-col gap-7 items-center">
         <motion.h3
           initial={{ translateY: 180 }}
@@ -141,10 +139,10 @@ const Home = () => {
       </div>
       <motion.div
         drag="y"
-        dragConstraints={{ top: 0, bottom: 550 }}
+        dragConstraints={{ top: 70, bottom: 650 }}
         dragMomentum={true}
-        initial={{ y: 0 }}
-        animate={{ y: isOpen ? 0 : 550 }}
+        initial={{ y: 70 }}
+        animate={{ y: isOpen ? 70 : 650 }}
         transition={{
           type: "tween",
           stiffness: 120,
@@ -176,7 +174,12 @@ const Home = () => {
           ))}
         />
         <div className="mt-8">
-          {transactions.length > 0 ? (
+          {loading && (
+            <div className="h-60 w-full mt-8">
+              <img src="./images/loading.svg" className="h-10 w-10 mx-auto" />
+            </div>
+          )}
+          {transactions.length > 0 && !loading ? (
             <SecondarySectionDiv
               label={"Recent pays"}
               background={true}
@@ -213,7 +216,7 @@ const Home = () => {
           display: isOpen ? "block" : "none",
         }}
         onClick={() => navigate("/scan-qr")}
-        className="z-10 mx-auto bg-[#00AFFF] p-4 rounded-full absolute bottom-30">
+        className="z-10 left-1/2 -translate-1/2 bg-[#00AFFF] p-4 rounded-full absolute bottom-0">
         <img src="./icons/scan_qr_dark.svg" alt="" className="h-12 w-12" />
       </motion.button>
     </div>
