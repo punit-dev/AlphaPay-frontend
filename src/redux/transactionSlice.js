@@ -56,6 +56,14 @@ const userToUserTransfer = createAsyncThunk(
           withCredentials: true,
         },
       );
+      if (transferData.method == "wallet") {
+        const user = JSON.parse(localStorage.getItem("user"));
+        const currentBalance = user.walletBalance - transferData.amount;
+        localStorage.setItem(
+          "user",
+          JSON.stringify({ ...user, walletBalance: currentBalance }),
+        );
+      }
       return res.data.transaction;
     } catch (err) {
       return thunkAPI.rejectWithValue(
@@ -90,6 +98,11 @@ const transactionSlice = createSlice({
       .addCase(fetchTransactions.fulfilled, (state, action) => {
         state.transactions = action.payload.allTransactions;
         state.balance = action.payload.currentBalance;
+        const user = JSON.parse(localStorage.getItem("user"));
+        localStorage.setItem(
+          "user",
+          JSON.stringify({ ...user, walletBalance: state.balance }),
+        );
         state.expenses = action.payload.expenses;
         state.loading = false;
       })

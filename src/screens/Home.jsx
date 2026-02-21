@@ -9,9 +9,9 @@ import SecondarySectionDiv from "../components/SecondarySectionDiv";
 import ProfileDiv from "../components/ProfileDiv";
 import { useNavigate } from "react-router";
 import ProfileView from "../components/ProfileView";
-import Loading from "./Loading";
 import ErrorScreen from "./ErrorScreen";
 import Nav from "../components/Nav";
+import { fetchNotification } from "../redux/notificationSlice";
 
 const Home = () => {
   const qrRef = useRef(null);
@@ -192,12 +192,12 @@ const Home = () => {
                   <ProfileDiv
                     key={idx}
                     name={
-                      item.payer.userRef._id == user._id
+                      item.payer.userRef._id == user?._id
                         ? item.payee.name
                         : item.payer.userRef?.fullname
                     }
                     src={
-                      item.payer.userRef._id == user._id
+                      item.payer.userRef._id == user?._id
                         ? item.payee.userRef.profilePic
                         : item.payer.userRef.profilePic
                     }

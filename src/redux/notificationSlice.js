@@ -69,19 +69,17 @@ const notificationSlice = createSlice({
   name: "notification",
   initialState: {
     notifications: [],
-    count: parseInt(localStorage.getItem("notifyCount")) || 0,
+    unread: false,
     loading: false,
     error: null,
   },
   reducers: {
     appendNotification: (state, action) => {
       state.notifications.unshift(action.payload);
-      state.count += 1;
-      localStorage.setItem("notifyCount", state.count);
+      state.unread = true;
     },
     clearCount: (state) => {
-      state.count = 0;
-      localStorage.setItem("notifyCount", state.count);
+      state.unread = false;
     },
   },
   extraReducers: (builder) => {
@@ -93,6 +91,8 @@ const notificationSlice = createSlice({
       .addCase(fetchNotification.fulfilled, (state, action) => {
         state.loading = false;
         state.notifications = action.payload;
+        const temp = state.notifications.filter((item) => !item.isRead);
+        state.unread = temp.length > 0;
       })
       .addCase(fetchNotification.rejected, (state, action) => {
         state.loading = false;

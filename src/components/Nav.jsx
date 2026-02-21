@@ -6,7 +6,7 @@ import { clearCount } from "../redux/notificationSlice";
 
 const Nav = () => {
   const navigate = useNavigate();
-  const { count } = useSelector((state) => state.notification);
+  const { unread } = useSelector((state) => state.notification);
   const dispatch = useDispatch();
 
   return (
@@ -27,10 +27,8 @@ const Nav = () => {
               dispatch(clearCount());
             }}
           />
-          {count > 0 && (
-            <div className="absolute top-0 right-0 bg-amber-300 h-4.5 w-4.5 rounded-full text-black flex items-center justify-center text-xs font-medium font-lexend">
-              {count}
-            </div>
+          {unread && (
+            <div className="absolute top-0 right-0 bg-amber-300 h-4.5 w-4.5 rounded-full text-black flex items-center justify-center text-xs font-medium font-lexend" />
           )}
         </div>
       </nav>

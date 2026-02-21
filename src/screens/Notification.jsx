@@ -50,37 +50,41 @@ const Notification = () => {
   return (
     <div className="h-screen w-full bg-[#0B0F1A]">
       <SecondaryNav title={"Notifications"} />
-      <div className="h-[calc(100vh-65px)] w-full overflow-y-auto px-5 py-3 flex flex-col gap-5">
-        {groupedNotification.map((group, idx) => (
-          <NotificationSecDiv
-            key={idx}
-            label={group.formattedDate}
-            delay={idx / 60}>
-            {group.items.map((item, id) => (
-              <NotificationDiv
-                key={id}
-                isRead={item.isRead}
-                message={item.message}
-                heading={toSentenceCase(item.type)}
-                src={notifyAccess[item.type].src}
-                onClick={(e) => {
-                  if (item.type == "transaction") {
-                    notifyAccess[item.type]?.onClick(
-                      item.data.transactionId,
-                      item._id,
-                    );
-                  } else {
-                    notifyAccess[item.type]?.onClick(
-                      item.data?.request?._id,
-                      item._id,
-                    );
-                  }
-                }}
-              />
-            ))}
-          </NotificationSecDiv>
-        ))}
-      </div>
+      {notifications.length == 0 ? (
+        <p className="text-lg text-center text-[#B0B8C3]">Empty</p>
+      ) : (
+        <div className="h-[calc(100vh-65px)] w-full overflow-y-auto px-5 py-3 flex flex-col gap-5">
+          {groupedNotification.map((group, idx) => (
+            <NotificationSecDiv
+              key={idx}
+              label={group.formattedDate}
+              delay={idx / 60}>
+              {group.items.map((item, id) => (
+                <NotificationDiv
+                  key={id}
+                  isRead={item.isRead}
+                  message={item.message}
+                  heading={toSentenceCase(item.type)}
+                  src={notifyAccess[item.type].src}
+                  onClick={(e) => {
+                    if (item.type == "transaction") {
+                      notifyAccess[item.type]?.onClick(
+                        item.data.transactionId,
+                        item._id,
+                      );
+                    } else {
+                      notifyAccess[item.type]?.onClick(
+                        item.data?.request?._id,
+                        item._id,
+                      );
+                    }
+                  }}
+                />
+              ))}
+            </NotificationSecDiv>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

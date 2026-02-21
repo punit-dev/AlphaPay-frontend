@@ -21,15 +21,21 @@ import AfterRequestSent from "./screens/AfterRequestSent";
 import RequestHist from "./screens/RequestHist";
 import RequestDetail from "./screens/RequestDetail";
 import RequestCancel from "./screens/RequestCancel";
-import { appendNotification } from "./redux/notificationSlice";
+import {
+  appendNotification,
+  fetchNotification,
+} from "./redux/notificationSlice";
 import { appendTransaction } from "./redux/transactionSlice";
 import { appendRequest } from "./redux/requestSlice";
 import AddCard from "./screens/AddCard";
+import { fetchProfile } from "./redux/userSlice";
+import EditProfilePic from "./screens/EditProfilePic";
 
 const App = () => {
   const [isTooWide, setIsTooWide] = useState(window.innerWidth > 425);
 
   const { user } = useSelector((state) => state.auth);
+  const [isFetched, setIsFetched] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -40,6 +46,14 @@ const App = () => {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  useEffect(() => {
+    if (!isFetched) {
+      dispatch(fetchProfile());
+      dispatch(fetchNotification());
+      setIsFetched(true);
+    }
+  }, [dispatch]);
 
   useEffect(() => {
     if (!user?._id) return;
@@ -140,6 +154,10 @@ const App = () => {
         <Route
           path="/add-card"
           element={<ProtectedRoute children={<AddCard />} />}
+        />
+        <Route
+          path="/profile/edit-profile-pic"
+          element={<ProtectedRoute children={<EditProfilePic />} />}
         />
         <Route path="*" element={<Navigate to="/splash" replace />} />
       </Routes>
