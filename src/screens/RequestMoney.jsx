@@ -14,7 +14,7 @@ import ErrorScreen from "./ErrorScreen";
 import { useNavigate } from "react-router";
 
 const RequestMoney = () => {
-  const { user } = useSelector((state) => state.auth);
+  const { user } = useSelector((state) => state.user);
   const [searchVal, setSearchVal] = useState("");
   const [amount, setAmount] = useState("");
   const [note, setNote] = useState("");

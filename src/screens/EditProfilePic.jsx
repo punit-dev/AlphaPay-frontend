@@ -37,10 +37,9 @@ const EditProfilePic = () => {
       />
       <div className="flex flex-wrap w-full px-5 pt-7 justify-center gap-4">
         {options.map((url, idx) => (
-          <div className="relative">
+          <div key={idx} className="relative">
             <img
               src={url}
-              key={idx}
               className="h-18 w-18 rounded-full"
               style={{ border: url == src ? "3px solid #00FEAE" : "none" }}
               onClick={() => setSrc(url)}
@@ -54,7 +53,7 @@ const EditProfilePic = () => {
       <div className="mt-5 px-5">
         <Button
           label={"Save"}
-          background="#00A571"
+          background="#00FEAE"
           onClick={handleOnClick}
           disabled={src == user.profilePic}
         />

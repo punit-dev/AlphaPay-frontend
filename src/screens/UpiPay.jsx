@@ -12,7 +12,7 @@ const UpiPay = () => {
   const [selected, setSelected] = useState(false);
   const { searchResults, loading, error } = useSearchUser(searchVal);
 
-  const { user } = useSelector((state) => state.auth);
+  const { user } = useSelector((state) => state.user);
   const navigate = useNavigate();
   const inputRef = useRef(null);
 

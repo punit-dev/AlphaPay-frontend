@@ -12,7 +12,7 @@ import NoteDiv from "../components/NoteDiv";
 
 const TransactionDetail = () => {
   const { txnId } = useParams();
-  const { user } = useSelector((state) => state.auth);
+  const { user } = useSelector((state) => state.user);
   const { txn, loading, error } = useSelector((state) => state.transactions);
   const dispatch = useDispatch();
 

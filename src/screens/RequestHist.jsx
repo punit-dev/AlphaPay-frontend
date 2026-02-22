@@ -14,7 +14,7 @@ const RequestHist = () => {
   const [selected, setSelected] = useState("receive");
   const dispatch = useDispatch();
   const { requests, isLoading, err } = useSelector((state) => state.request);
-  const { user } = useSelector((state) => state.auth);
+  const { user } = useSelector((state) => state.user);
   const navigate = useNavigate();
 
   useEffect(() => {

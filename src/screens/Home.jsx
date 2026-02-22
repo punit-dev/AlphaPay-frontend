@@ -16,7 +16,7 @@ import { fetchNotification } from "../redux/notificationSlice";
 const Home = () => {
   const qrRef = useRef(null);
   const [isOpen, setIsOpen] = useState(true);
-  const { user } = useSelector((state) => state.auth);
+  const { user } = useSelector((state) => state.user);
   const { transactions, loading, error } = useSelector(
     (state) => state.transactions,
   );
@@ -48,6 +48,11 @@ const Home = () => {
       },
       cornersDotOptions: {
         type: "rounded",
+      },
+      qrOptions: {
+        errorCorrectionLevel: "M",
+        mode: "Byte",
+        typeNumber: 0,
       },
     });
     if (qrRef.current) {
