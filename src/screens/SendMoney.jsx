@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import SecondaryNav from "../components/SecondaryNav";
 import ProfileView from "../components/ProfileView";
 import PaymentInput from "../components/PaymentInput";
 import Button from "../components/Button";
-import { m, motion } from "motion/react";
+import { motion } from "motion/react";
 import PaymentOption from "../components/PaymentOption";
 import { useLocation, useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";

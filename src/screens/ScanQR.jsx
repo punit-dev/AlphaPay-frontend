@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Html5Qrcode } from "html5-qrcode";
-import axios from "axios";
 import SecondaryNav from "../components/SecondaryNav";
 import { motion } from "motion/react";
 import Loading from "./Loading";

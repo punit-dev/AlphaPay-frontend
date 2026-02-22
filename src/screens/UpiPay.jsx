@@ -3,7 +3,6 @@ import SecondaryNav from "../components/SecondaryNav";
 import { motion } from "motion/react";
 import { useSelector } from "react-redux";
 import ProfileForSend from "../components/ProfileForSend";
-import axios from "axios";
 import { useNavigate } from "react-router";
 import useSearchUser from "../hooks/useSearchUser";
 

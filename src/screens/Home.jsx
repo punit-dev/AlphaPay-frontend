@@ -11,7 +11,6 @@ import { useNavigate } from "react-router";
 import ProfileView from "../components/ProfileView";
 import ErrorScreen from "./ErrorScreen";
 import Nav from "../components/Nav";
-import { fetchNotification } from "../redux/notificationSlice";
 
 const Home = () => {
   const qrRef = useRef(null);

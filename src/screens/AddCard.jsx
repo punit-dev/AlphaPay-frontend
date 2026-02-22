@@ -45,7 +45,7 @@ const AddCard = () => {
     <div className="h-screen w-full bg-[#0B0F1A] relative">
       <SecondaryNav title={"Add Card"} />
 
-      <div className=" ">
+      <div>
         <h2 className="mt-5 mb-3 ml-5 text-2xl font-urbanist font-semibold text-white">
           Your cards
         </h2>
