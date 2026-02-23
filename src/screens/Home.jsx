@@ -183,6 +183,11 @@ const Home = () => {
               <img src="./images/loading.svg" className="h-10 w-10 mx-auto" />
             </div>
           )}
+          {error && (
+            <p className="text-lg text-center text-[#B0B8C3]">
+              Your transaction history is empty.
+            </p>
+          )}
           {transactions.length > 0 && !loading ? (
             <SecondarySectionDiv
               label={"Recent pays"}
@@ -202,8 +207,8 @@ const Home = () => {
                     }
                     src={
                       item.payer.userRef._id == user?._id
-                        ? item.payee.userRef.profilePic
-                        : item.payer.userRef.profilePic
+                        ? item.payee.userRef?.profilePic
+                        : item.payer.userRef?.profilePic
                     }
                     onClick={() => navigate(`/balance-hist/${item._id}`)}
                   />
