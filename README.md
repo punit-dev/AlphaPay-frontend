@@ -2,14 +2,15 @@
 
 AlphaPay Frontend is a mobile-focused React.js Single Page Application for secure digital payments. It allows users to register, log in, scan QR codes, send payments, and view transaction history.
 
+
 ## 🚀 Features
 
 - User Registration & Login
-- JWT-based Authentication
+- JWT Authentication
 - Protected Routes
 - QR Code Generation & Scanning
-- Send Payments via UPI
-- View Transaction History
+- Send Payments (UPI-based)
+- Transaction History
 - Mobile-Optimized UI
 
 ## 🛠️ Tech Stack
@@ -19,11 +20,31 @@ AlphaPay Frontend is a mobile-focused React.js Single Page Application for secur
 - React Router
 - Axios
 - Tailwind CSS / CSS
-- QR Code Libraries
+
+## 🔗 Backend Repository
+
+This frontend connects to the AlphaPay Backend built with Node.js, Express.js, and MongoDB.
+
+👉 Backend Repo: https://github.com/YOUR-USERNAME/YOUR-BACKEND-REPO
+
+## 📡 API Integration
+
+The frontend communicates with custom REST APIs for:
+
+- Authentication API (Register/Login)
+- User Profile API
+- Payment API
+- Transaction API
+- QR Processing API
+
+All APIs are secured using JWT-based authentication.
 
 ## 📱 Platform
 
-⚠️ This application is designed for **mobile screens only** and is not optimized for desktop view.
+⚠️ Designed for mobile screens only.
+
+---
+
 
 ## ⚙️ Installation
 
@@ -33,15 +54,5 @@ cd alphapay-frontend
 npm install
 npm start
 ```
-
-## 🔐 Authentication
-
-The application uses JWT-based authentication. Protected routes are accessible only after successful login.
-
-## 📡 API
-
-The frontend communicates with the backend using REST APIs for authentication, payments, and transaction management.
-
----
 
 Made with by Punit Poddar
