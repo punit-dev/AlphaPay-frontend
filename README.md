@@ -25,7 +25,7 @@ AlphaPay Frontend is a mobile-focused React.js Single Page Application for secur
 
 This frontend connects to the AlphaPay Backend built with Node.js, Express.js, and MongoDB.
 
-👉 Backend Repo: https://github.com/YOUR-USERNAME/YOUR-BACKEND-REPO
+👉 Backend Repo: https://github.com/punit-dev/AlphaPay-backend
 
 ## 📡 API Integration
 
