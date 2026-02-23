@@ -8,9 +8,7 @@ const UserCard = ({
   expiry,
   holderName,
   cardType,
-  onClick = () => {
-    console.log("deleted");
-  },
+  onClick = () => {},
 }) => {
   const [type, setType] = useState("password");
 
