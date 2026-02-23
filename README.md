@@ -1,18 +1,47 @@
-# React + Vite
+# AlphaPay Frontend 💳
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+AlphaPay Frontend is a mobile-focused React.js Single Page Application for secure digital payments. It allows users to register, log in, scan QR codes, send payments, and view transaction history.
 
-Currently, two official plugins are available:
+## 🚀 Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- User Registration & Login
+- JWT-based Authentication
+- Protected Routes
+- QR Code Generation & Scanning
+- Send Payments via UPI
+- View Transaction History
+- Mobile-Optimized UI
 
-## React Compiler
+## 🛠️ Tech Stack
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+- React.js
+- Redux Toolkit
+- React Router
+- Axios
+- Tailwind CSS / CSS
+- QR Code Libraries
 
-Note: This will impact Vite dev & build performances.
+## 📱 Platform
 
-## Expanding the ESLint configuration
+⚠️ This application is designed for **mobile screens only** and is not optimized for desktop view.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## ⚙️ Installation
+
+```bash
+git clone https://github.com/punit-dev/AlphaPay-frontend
+cd alphapay-frontend
+npm install
+npm start
+```
+
+## 🔐 Authentication
+
+The application uses JWT-based authentication. Protected routes are accessible only after successful login.
+
+## 📡 API
+
+The frontend communicates with the backend using REST APIs for authentication, payments, and transaction management.
+
+---
+
+Made with by Punit Poddar
