@@ -8,7 +8,8 @@ import Button from "../components/Button";
 import { useNavigate } from "react-router";
 
 const EditProfilePic = () => {
-  const { user, options, loading } = useSelector((state) => state.user);
+  const { options, loading } = useSelector((state) => state.user);
+  const { user } = useSelector((state) => state.auth);
   const [src, setSrc] = useState(user.profilePic);
   const dispatch = useDispatch();
   const navigate = useNavigate();

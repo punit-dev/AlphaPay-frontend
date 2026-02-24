@@ -10,7 +10,7 @@ import { useNavigate } from "react-router";
 import Loading from "./Loading";
 
 const BalanceHist = () => {
-  const { user } = useSelector((state) => state.user);
+  const { user } = useSelector((state) => state.auth);
   const { transactions, loading, error, balance, expenses } = useSelector(
     (state) => state.transactions,
   );

@@ -10,7 +10,7 @@ import { useNavigate } from "react-router";
 
 const Profile = () => {
   const { loading, error } = useSelector((state) => state.auth);
-  const { user } = useSelector((state) => state.user);
+  const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 

@@ -37,7 +37,7 @@ const month = [
 ];
 
 const RequestDetail = () => {
-  const { user } = useSelector((state) => state.user);
+  const { user } = useSelector((state) => state.auth);
   const { reqId } = useParams();
   const { request, isLoading, err } = useSelector((state) => state.request);
   const { balance } = useSelector((state) => state.transactions);

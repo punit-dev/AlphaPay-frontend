@@ -255,7 +255,6 @@ const Authentication = () => {
           <h2 className="text-white text-center text-2xl font-medium">
             Set UPI Pin
           </h2>
-          {err && <p className="text-red-500">{err}</p>}
           <div className="flex gap-4 flex-col">
             <p className="text-white mt-8 text-center">
               Please set a 6-digit UPI PIN to complete your account setup.

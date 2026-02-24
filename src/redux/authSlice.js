@@ -64,6 +64,22 @@ const resendOtp = createAsyncThunk(
   },
 );
 
+const fetchProfile = createAsyncThunk(
+  "/user/fetchProfile",
+  async (_, thunkAPI) => {
+    try {
+      const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/profile`, {
+        withCredentials: true,
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      });
+
+      return res.data.user;
+    } catch (err) {
+      return thunkAPI.rejectWithValue(err?.response?.data?.message);
+    }
+  },
+);
+
 const logoutUser = createAsyncThunk("auth/logoutUser", async (_, thunkAPI) => {
   try {
     const res = await axios.post(
@@ -171,6 +187,19 @@ const authSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
+      .addCase(fetchProfile.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchProfile.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = action.payload;
+        localStorage.setItem("user", JSON.stringify(action.payload));
+      })
+      .addCase(fetchProfile.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
       .addCase(logoutUser.pending, (state) => {
         state.loading = true;
       })
@@ -192,4 +221,11 @@ const authSlice = createSlice({
 
 export default authSlice.reducer;
 export const { clearError, clearMessage, clearOtp } = authSlice.actions;
-export { loginUser, signupUser, verifyOtp, resendOtp, logoutUser };
+export {
+  loginUser,
+  signupUser,
+  verifyOtp,
+  resendOtp,
+  logoutUser,
+  fetchProfile,
+};

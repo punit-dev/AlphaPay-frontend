@@ -1,21 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-
-const fetchProfile = createAsyncThunk(
-  "/user/fetchProfile",
-  async (_, thunkAPI) => {
-    try {
-      const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/profile`, {
-        withCredentials: true,
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      });
-
-      return res.data.user;
-    } catch (err) {
-      return thunkAPI.rejectWithValue(err?.response?.data?.message);
-    }
-  },
-);
+import { fetchProfile } from "./authSlice";
 
 const fetchProfilePicOption = createAsyncThunk(
   "/user/fetchProfilePicOption",
@@ -53,6 +38,7 @@ const updateProfilePic = createAsyncThunk(
         },
       );
 
+      thunkAPI.dispatch(fetchProfile());
       return res.data.user;
     } catch (err) {
       return thunkAPI.rejectWithValue(
@@ -88,28 +74,12 @@ const updateUpiPin = createAsyncThunk(
 const userSlice = createSlice({
   name: "user",
   initialState: {
-    user: localStorage.getItem("user")
-      ? JSON.parse(localStorage.getItem("user"))
-      : null,
     loading: false,
     error: null,
     options: [],
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchProfile.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(fetchProfile.fulfilled, (state, action) => {
-        state.loading = false;
-        state.user = action.payload;
-        localStorage.setItem("user", JSON.stringify(action.payload));
-      })
-      .addCase(fetchProfile.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      })
       .addCase(updateUpiPin.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -137,10 +107,8 @@ const userSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(updateProfilePic.fulfilled, (state, action) => {
+      .addCase(updateProfilePic.fulfilled, (state) => {
         state.loading = false;
-        state.user = action.payload;
-        localStorage.setItem("user", JSON.stringify(action.payload));
       })
       .addCase(updateProfilePic.rejected, (state, action) => {
         state.error = action.payload;

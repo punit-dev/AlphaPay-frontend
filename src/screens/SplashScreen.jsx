@@ -8,6 +8,7 @@ const SplashScreen = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [isDelay, setIsDelay] = useState(false);
 
   const hasCalledRef = useRef(false);
 
@@ -31,6 +32,7 @@ const SplashScreen = () => {
     hasCalledRef.current = true;
 
     checkApiHealth();
+    setTimeout(() => setIsDelay(true), 3000);
   }, []);
 
   useEffect(() => {
@@ -48,7 +50,7 @@ const SplashScreen = () => {
   }
 
   return (
-    <div className="flex justify-center items-center w-full h-screen bg-linear-140 from-[#342952] via-[#0B0F1A] via-40% to-[#00AFFF] to-300%">
+    <div className="flex flex-col justify-center items-center w-full h-screen bg-linear-140 from-[#342952] via-[#0B0F1A] via-40% to-[#00AFFF] to-300% relative">
       <div>
         <motion.img
           initial={{ scale: 0.9 }}
@@ -81,6 +83,19 @@ const SplashScreen = () => {
         <p className="text-lg text-gray-500 mt-2">
           Your Ultimate Payment Solution
         </p>
+      </div>
+      <div className="absolute bottom-10">
+        {isDelay && (
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="text-lg text-gray-500 mt-2 text-center">
+            <span className="font-bold text-xl">⏳ Getting things ready…</span>{" "}
+            <br />
+            Our server is waking up from a short nap. Everything will be ready
+            in a few seconds.
+          </motion.p>
+        )}
       </div>
     </div>
   );
