@@ -42,7 +42,7 @@ const AddCard = () => {
     return <ErrorScreen error={error} onRetry={() => location.reload()} />;
   }
   return (
-    <div className="h-screen w-full bg-[#0B0F1A] relative">
+    <div className="h-screen w-full bg-[#0B0F1A] relative overflow-hidden">
       <SecondaryNav title={"Add Card"} />
 
       <div className="pt-20">
