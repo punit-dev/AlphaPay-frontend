@@ -69,7 +69,7 @@ const RequestMoney = () => {
   return (
     <div className="h-screen w-full bg-[#0B0F1A]">
       <SecondaryNav title={"Request money"} />
-      <div className="px-5 w-full h-full">
+      <div className="px-5 w-full h-full pt-20">
         <form
           onSubmit={handleForm}
           className="w-full flex flex-col justify-between pt-7 pb-5">

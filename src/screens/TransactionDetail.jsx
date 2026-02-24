@@ -26,7 +26,7 @@ const TransactionDetail = () => {
   if (error) return <div>Error: {error}</div>;
 
   return (
-    <div className="h-screen w-full bg-[#0B0F1A]">
+    <div className="h-screen w-full bg-[#0B0F1A] pt-20">
       {txn && (
         <SecondaryNav
           title={

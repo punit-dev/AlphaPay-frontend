@@ -23,7 +23,7 @@ const PhonePay = () => {
   return (
     <div className="bg-[#0B0F1A] h-screen w-full">
       <SecondaryNav title={"Pay via Phone no."} />
-      <div>
+      <div className="pt-20">
         <div className="px-5 mt-5">
           <motion.div
             initial={{ boxShadow: "none" }}

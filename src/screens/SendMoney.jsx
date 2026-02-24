@@ -12,7 +12,7 @@ import { fetchCards } from "../redux/cardSlice";
 const SendMoney = () => {
   const location = useLocation();
   const { user } = location.state;
-  const { balance } = useSelector((state) => state.transactions);
+  const { user: payer } = useSelector((state) => state.auth);
   const { cards, loading, error } = useSelector((state) => state.card);
   const [cardId, setCardId] = useState(null);
   const dispatch = useDispatch();
@@ -28,14 +28,14 @@ const SendMoney = () => {
   return (
     <div className="h-screen w-full bg-[#0B0F1A] relative">
       <SecondaryNav title={"Send money"} />
-      <div className="w-full px-8 mt-14">
+      <div className="w-full px-8 mt-14 pt-5">
         <ProfileView user={user} />
       </div>
       <div className="px-10">
         <PaymentInput type={"number"} value={amount} setValue={setAmount} />
         <PaymentInput type={"text"} value={note} setValue={setNote} />
       </div>
-      <div className="w-full px-10 absolute bottom-10">
+      <div className="w-full px-10 absolute bottom-25">
         <Button
           label={"Pay"}
           onClick={() => {
@@ -58,7 +58,7 @@ const SendMoney = () => {
           className="absolute bottom-0 left-0 right-0 h-screen bg-[#0B0F1A]/50 backdrop-blur-sm flex items-end justify-center">
           <motion.div
             initial={{ translateY: "100%" }}
-            animate={{ translateY: "0%" }}
+            animate={{ translateY: "-18%" }}
             transition={{
               duration: 0.5,
               type: "tween",
@@ -72,7 +72,7 @@ const SendMoney = () => {
                 type={"Wallet"}
                 selected={selected === "Wallet"}
                 onChange={setSelected}
-                amount={balance}
+                amount={payer.walletBalance}
                 onClick={() => setCardId(null)}
               />
               {cards.length != 0 ? (

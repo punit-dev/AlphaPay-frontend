@@ -14,7 +14,7 @@ const AfterRequestSent = () => {
   return (
     <div className="bg-[#0B0F1A] h-screen w-full">
       <SecondaryNav title={"Request Sent"} />
-      <div className="px-5">
+      <div className="px-5 pt-10">
         <motion.img
           initial={{ scale: 0.5, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}

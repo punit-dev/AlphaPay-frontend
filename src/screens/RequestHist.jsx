@@ -41,7 +41,7 @@ const RequestHist = () => {
     <div className="h-screen w-full bg-[#0B0F1A] overflow-y-auto">
       <SecondaryNav title={"Request history"} />
 
-      <div className="flex justify-center gap-10 items-center px-5 mt-5 font-urbanist font-semibold text-xl">
+      <div className="flex justify-center gap-10 items-center px-5 mt-5 font-urbanist font-semibold text-xl pt-20">
         {["receive", "sent"].map((tab) => (
           <motion.button
             key={tab}

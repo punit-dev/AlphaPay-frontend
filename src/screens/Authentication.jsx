@@ -107,7 +107,7 @@ const Authentication = () => {
           <h2 className="text-white text-center text-3xl font-medium">
             Log in
           </h2>
-          <p className="text-red-400 text-center">{error && error?.message}</p>
+          <p className="text-red-400 text-center">{error && error}</p>
           <div className="mt-5 flex flex-col gap-4">
             <Input
               label={"Email"}
@@ -168,7 +168,7 @@ const Authentication = () => {
           <h2 className="text-white text-center text-2xl font-medium">
             Create an account
           </h2>
-          <p className="text-red-400 text-center">{error && error?.message}</p>
+          <p className="text-red-400 text-center">{error && error}</p>
           <p className="text-white mt-3 font-lexend">
             Already have an account?{" "}
             <span onClick={() => setTranslate("240%")} className="text-[#0aff]">
@@ -225,7 +225,7 @@ const Authentication = () => {
           <h2 className="text-white text-center text-2xl font-medium">
             Verify your email
           </h2>
-          <p className="text-red-400 text-center">{error && error?.message}</p>
+          <p className="text-red-400 text-center">{error && error}</p>
           <div className="flex gap-4 flex-col">
             <p className="text-white mt-8">
               please enter 6 digit code sent to {user?.email}

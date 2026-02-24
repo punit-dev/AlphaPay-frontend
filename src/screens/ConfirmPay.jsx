@@ -47,7 +47,7 @@ const ConfirmPay = () => {
   return (
     <div className="bg-[#0B0F1A] h-screen w-full relative">
       <SecondaryNav />
-      <div>
+      <div className="pt-20">
         <div className="px-5 mt-5">
           <div className="text-white font-urbanist text-xl font-medium flex items-center justify-between px-3 py-2 border-2 border-[#00AFFF] rounded-2xl shadow-[0_0_20px_#00AFFF89]">
             <p>Payment Through: </p>

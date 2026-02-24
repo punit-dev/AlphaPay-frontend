@@ -104,7 +104,7 @@ const RequestDetail = () => {
   return (
     <div className="h-screen w-full bg-[#0B0F1A]">
       <SecondaryNav title={"Request Detail"} />
-      <div className="px-10 mt-3">
+      <div className="px-10 mt-3 pt-20">
         <ProfileView
           user={
             request?.senderId?._id == user._id

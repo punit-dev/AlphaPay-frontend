@@ -131,6 +131,7 @@ const authSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(loginUser.pending, (state) => {
+        state.error = null;
         state.loading = true;
       })
       .addCase(loginUser.fulfilled, (state, action) => {
@@ -147,6 +148,7 @@ const authSlice = createSlice({
         state.error = action.payload;
       })
       .addCase(signupUser.pending, (state) => {
+        state.error = null;
         state.loading = true;
       })
       .addCase(signupUser.fulfilled, (state, action) => {
@@ -164,6 +166,7 @@ const authSlice = createSlice({
         state.error = action.payload;
       })
       .addCase(verifyOtp.pending, (state) => {
+        state.error = null;
         state.loading = true;
       })
       .addCase(verifyOtp.fulfilled, (state, action) => {
@@ -176,6 +179,7 @@ const authSlice = createSlice({
         state.error = action.payload;
       })
       .addCase(resendOtp.pending, (state) => {
+        state.error = null;
         state.loading = true;
       })
       .addCase(resendOtp.fulfilled, (state, action) => {
@@ -201,6 +205,7 @@ const authSlice = createSlice({
         state.error = action.payload;
       })
       .addCase(logoutUser.pending, (state) => {
+        state.error = null;
         state.loading = true;
       })
       .addCase(logoutUser.fulfilled, (state) => {

@@ -9,7 +9,7 @@ const SecondaryNav = ({ onClick, title }) => {
   };
 
   return (
-    <div className="flex justify-between items-center w-full px-4 py-3 bg-[#0B0F1A] border-b border-[#1F2633]">
+    <div className="flex justify-between items-center w-full px-4 py-3 bg-[#0B0F1A] border-b border-[#1F2633] fixed top-0 left-0 z-10">
       <button
         className="bg-[#161B26] p-1 rounded-full"
         onClick={onClick || backward}>

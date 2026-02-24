@@ -17,7 +17,7 @@ const RequestCancel = () => {
         title={title || "Request Canceled"}
         onClick={() => navigate("/home")}
       />
-      <div className="mt-10 px-5">
+      <div className="mt-10 px-5 pt-20">
         <div className="relative p-4 h-40 w-40 rounded-full bg-[#FF4C4C] mx-auto flex items-center justify-center">
           <RxCross2 className="mx-auto text-black w-30 h-30" />
         </div>

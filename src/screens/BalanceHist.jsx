@@ -33,7 +33,7 @@ const BalanceHist = () => {
   return (
     <div className="bg-[#0B0F1A] h-screen w-full">
       <SecondaryNav title={"Balance & history"} />
-      <div className="px-5 pt-10">
+      <div className="px-5 pt-20">
         <BalanceDiv
           from={0}
           to={balance}

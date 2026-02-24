@@ -28,7 +28,7 @@ const EditProfilePic = () => {
   };
 
   return (
-    <div className="h-screen w-full bg-[#0B0F1A]">
+    <div className="h-screen w-full bg-[#0B0F1A] pt-15">
       {loading && <Loading />}
       <SecondaryNav title={"Edit profile pic"} />
       <img

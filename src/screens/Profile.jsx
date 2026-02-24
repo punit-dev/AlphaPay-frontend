@@ -21,7 +21,7 @@ const Profile = () => {
     <div className="h-screen w-full bg-[#0B0F1A]">
       <SecondaryNav />
 
-      <div className="flex justify-center items-center mt-5 px-5 py-3 gap-5 relative">
+      <div className="flex justify-center items-center mt-5 px-5 py-3 gap-5 relative pt-15">
         <div className="font-urbanist font-semibold text-right w-full">
           <h3 className="text-xl text-[#B0B8C3]">{user.fullname}</h3>
           <p className="text-xl text-white">{user.upiId}</p>

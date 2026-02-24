@@ -53,7 +53,7 @@ const Notification = () => {
       {notifications.length == 0 ? (
         <p className="text-lg text-center text-[#B0B8C3]">Empty</p>
       ) : (
-        <div className="h-[calc(100vh-65px)] w-full overflow-y-auto px-5 py-3 flex flex-col gap-5">
+        <div className="h-[calc(100vh-65px)] w-full overflow-y-auto px-5 py-3 flex flex-col gap-5 pt-20">
           {groupedNotification.map((group, idx) => (
             <NotificationSecDiv
               key={idx}

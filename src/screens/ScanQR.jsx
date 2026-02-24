@@ -133,7 +133,7 @@ const ScanQR = () => {
   }
 
   return (
-    <div className="h-screen w-full bg-black relative overflow-hidden">
+    <div className="h-screen w-full bg-black relative overflow-hidden pt-15">
       {loading && (
         <div className="absolute inset-0 z-50 bg-black/80 flex items-center justify-center">
           <Loading />
@@ -141,7 +141,7 @@ const ScanQR = () => {
       )}
       <SecondaryNav title={"Scan QR code"} />
 
-      <div id="scanner" className="absolute inset-0 overflow-hidden h-[92%]" />
+      <div id="scanner" className="absolute inset-0 overflow-hidden h-full" />
 
       <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
         <div id="scan-frame" className="h-75 w-75 mx-auto relative">

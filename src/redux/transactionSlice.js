@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { fetchProfile } from "./authSlice";
 
 const fetchTransactions = createAsyncThunk(
   "transactions/fetchTransactions",
@@ -57,12 +58,7 @@ const userToUserTransfer = createAsyncThunk(
         },
       );
       if (transferData.method == "wallet") {
-        const user = JSON.parse(localStorage.getItem("user"));
-        const currentBalance = user.walletBalance - transferData.amount;
-        localStorage.setItem(
-          "user",
-          JSON.stringify({ ...user, walletBalance: currentBalance }),
-        );
+        thunkAPI.dispatch(fetchProfile());
       }
       return res.data.transaction;
     } catch (err) {
